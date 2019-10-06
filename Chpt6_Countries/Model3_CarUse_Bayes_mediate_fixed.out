@@ -1,0 +1,1221 @@
+Mplus VERSION 8.1
+MUTHEN & MUTHEN
+03/03/2019   8:29 PM
+
+INPUT INSTRUCTIONS
+
+  TITLE: Model 3 - Car Use
+
+  DATA:	
+  	FILE IS 20190227_DaliaCarPride_Mplus.txt;
+
+  VARIABLE:	
+  	NAMES ARE
+  	R_ID	iso_num	
+  	age	gen	inc	log_inc	
+  	edu_high	edu_low	empC	ess	log_ess	
+  	carown	caraccess	q09	q01D	
+  	developing	GDP_percap_PPP	Gini_index	
+  	PassKm_perCap	LogPassKm_Cap	RegVeh_perCap	
+  	age_m	inc_m	linc_m	gen_m	
+  	eduH_m	eduL_m	emp_m	ess_m	less_m	
+  	age_cen	gen_cen	inc_cen	linc_cen	
+  	eduH_cen	eduL_cen	emp_cen	ess_cen	less_cen	
+  	CARPR_ID	CARPR_CO	
+  	q14A	q14B	q14F	q14K	
+  	q15A	q15B	q15C	q15D	q15F;
+  	
+    USEVARIABLES ARE
+      	iso_num
+      	CARPR_ID CARPR_CO
+      	age_cen	gen_cen	inc_cen	
+  	    eduH_cen emp_cen less_cen
+          carown q01D logMiles;
+
+    !USEOBSERVATIONS ARE (caraccess EQ 1);
+
+    CATEGORICAL = carown q01D;
+
+    WITHIN = CARPR_ID age_cen gen_cen	inc_cen	
+  	       eduH_cen emp_cen less_cen;
+
+    BETWEEN = CARPR_CO;
+
+    CLUSTER = iso_num;
+    IDVARIABLE = R_ID;	
+    MISSING = ALL (-9999);
+
+  DEFINE: logMiles = log(q09);
+
+  ANALYSIS:
+      TYPE = TWOLEVEL;
+      ESTIMATOR = BAYES;
+      BITERATIONS = 60000(5000); !maximum of 60,000, minimum of 2000
+      THIN = 10;
+      PROCESSORS = 2;
+      !H1ITERATIONS = 7500;
+      !MITERATIONS = 5000;
+
+  MODEL:
+      %WITHIN%
+      carown ON age_cen gen_cen inc_cen	
+  	          eduH_cen emp_cen less_cen
+                CARPR_ID (a);
+      CARPR_ID ON age_cen gen_cen inc_cen	
+  	       eduH_cen emp_cen less_cen
+             q01D logMiles;
+      q01D ON age_cen gen_cen inc_cen
+               eduH_cen emp_cen less_cen
+               carown (b1);
+               !CARPR_ID;
+      logMiles ON age_cen gen_cen inc_cen
+               eduH_cen emp_cen less_cen
+               carown (b2);
+               !CARPR_ID;
+      logMiles WITH q01D;
+      inc_cen eduH_cen;
+
+      %BETWEEN%
+      q01D carown logMiles;
+      logMiles WITH q01D carown;
+      q01D WITH carown;
+      q01D logMiles carown WITH CARPR_CO;
+
+  MODEL CONSTRAINT:
+       NEW (b1ind b2ind);
+       b1ind = a * b1;
+       b2ind = a * b2;
+  !    logMiles IND q01D CARPR_CO;
+
+  SAVEDATA:
+      RESULTS = Model3_caruse_bayes_results.dat;
+      !FSCORES = Model2_carown_fscores.dat;
+
+  OUTPUT:
+      STANDARDIZED TECH1;
+
+
+
+INPUT READING TERMINATED NORMALLY
+
+
+
+Model 3 - Car Use
+
+SUMMARY OF ANALYSIS
+
+Number of groups                                                 1
+Number of observations                                       41932
+
+Number of dependent variables                                    5
+Number of independent variables                                  6
+Number of continuous latent variables                            0
+
+Observed dependent variables
+
+  Continuous
+   CARPR_CO    CARPR_ID    LOGMILES
+
+  Binary and ordered categorical (ordinal)
+   CAROWN      Q01D
+
+Observed independent variables
+   AGE_CEN     GEN_CEN     INC_CEN     EDUH_CEN    EMP_CEN     LESS_CEN
+
+Variables with special functions
+
+  Cluster variable      ISO_NUM
+  ID variable           R_ID
+
+  Within variables
+   CARPR_ID    AGE_CEN     GEN_CEN     INC_CEN     EDUH_CEN    EMP_CEN
+   LESS_CEN
+
+  Between variables
+   CARPR_CO
+
+
+Estimator                                                    BAYES
+Specifications for Bayesian Estimation
+  Point estimate                                            MEDIAN
+  Number of Markov chain Monte Carlo (MCMC) chains               2
+  Random seed for the first chain                                0
+  Starting value information                           UNPERTURBED
+  Algorithm used for Markov chain Monte Carlo           GIBBS(PX1)
+  Convergence criterion                                  0.500D-01
+  Maximum number of iterations                               60000
+  K-th iteration used for thinning                              10
+Link                                                        PROBIT
+
+Input data file(s)
+  20190227_DaliaCarPride_Mplus.txt
+Input data format  FREE
+
+
+SUMMARY OF DATA
+
+     Number of clusters                         51
+
+       Size (s)    Cluster ID with Size s
+
+        208        22
+        345        6
+        500        17
+        504        37
+        507        10 48
+        516        16
+        517        3
+        519        31
+        521        9 25 29
+        522        2
+        523        50
+        525        51
+        528        15
+        529        24
+        535        1 23
+        773        38
+        993        49
+       1000        34
+       1001        45
+       1002        46
+       1003        26 42
+       1004        41
+       1005        39
+       1008        13
+       1010        27
+       1016        18 32
+       1017        44
+       1020        40 4
+       1022        36
+       1024        20
+       1025        7
+       1027        33 5
+       1029        28
+       1035        52
+       1036        21
+       1038        12
+       1040        8
+       1049        30
+       1051        14
+       1055        43
+       1056        35
+       1064        19
+       1080        11
+
+
+
+COVARIANCE COVERAGE OF DATA
+
+Minimum covariance coverage value   0.100
+
+     Number of missing data patterns             8
+
+
+     PROPORTION OF DATA PRESENT
+
+
+           Covariance Coverage
+              CAROWN        Q01D          CARPR_CO      CARPR_ID      INC_CEN
+              ________      ________      ________      ________      ________
+ CAROWN         1.000
+ Q01D           1.000         1.000
+ CARPR_CO       1.000         1.000         1.000
+ CARPR_ID       1.000         1.000         1.000         1.000
+ INC_CEN        0.839         0.839         0.839         0.839         0.839
+ EDUH_CEN       0.944         0.944         0.944         0.944         0.810
+ LOGMILES       0.596         0.596         0.596         0.596         0.529
+ AGE_CEN        1.000         1.000         1.000         1.000         0.839
+ GEN_CEN        1.000         1.000         1.000         1.000         0.839
+ EMP_CEN        1.000         1.000         1.000         1.000         0.839
+ LESS_CEN       1.000         1.000         1.000         1.000         0.839
+
+
+           Covariance Coverage
+              EDUH_CEN      LOGMILES      AGE_CEN       GEN_CEN       EMP_CEN
+              ________      ________      ________      ________      ________
+ EDUH_CEN       0.944
+ LOGMILES       0.573         0.596
+ AGE_CEN        0.944         0.596         1.000
+ GEN_CEN        0.944         0.596         1.000         1.000
+ EMP_CEN        0.944         0.596         1.000         1.000         1.000
+ LESS_CEN       0.944         0.596         1.000         1.000         1.000
+
+
+           Covariance Coverage
+              LESS_CEN
+              ________
+ LESS_CEN       1.000
+
+
+UNIVARIATE PROPORTIONS AND COUNTS FOR CATEGORICAL VARIABLES
+
+    CAROWN
+      Category 1    0.514        21574.000
+      Category 2    0.486        20358.000
+    Q01D
+      Category 1    0.573        24045.000
+      Category 2    0.427        17887.000
+
+
+
+UNIVARIATE SAMPLE STATISTICS
+
+
+     UNIVARIATE HIGHER-ORDER MOMENT DESCRIPTIVE STATISTICS
+
+         Variable/         Mean/     Skewness/   Minimum/ % with                Percentiles
+        Sample Size      Variance    Kurtosis    Maximum  Min/Max      20%/60%    40%/80%    Median
+
+     CARPR_CO              0.003       0.301      -1.202    1.96%      -0.618     -0.236      0.011
+              51.000       0.418      -0.300       1.603    1.96%       0.170      0.500
+     CARPR_ID              0.000       1.166      -2.143    0.22%      -1.360     -1.027     -0.353
+           41932.000       2.596       0.935       7.267    0.00%       0.024      1.296
+     INC_CEN               0.000       2.523     -92.979    0.03%     -17.021     -9.128     -6.375
+           35183.000     999.278       8.341     170.298    0.01%      -3.899      7.684
+     EDUH_CEN              0.000       0.108      -0.731    0.33%      -0.467     -0.335     -0.299
+           39597.000       0.235      -1.764       0.811    0.23%       0.362      0.533
+     LOGMILES              3.157      -0.474       1.609   26.09%       1.609      3.401      3.401
+           24975.000       1.014      -0.921       4.700    6.41%       3.401      4.317
+     AGE_CEN               0.000       0.200     -25.462    0.01%     -11.460     -4.492     -0.498
+           41932.000     138.669      -0.764      32.936    0.00%       3.870     10.604
+     GEN_CEN               0.000      -0.114      -0.695    0.39%      -0.534     -0.496      0.415
+           41932.000       0.248      -1.965       0.559    1.04%       0.448      0.478
+     EMP_CEN               0.000       0.246      -0.567    1.04%      -0.463     -0.378     -0.341
+           41932.000       0.240      -1.846       0.778    0.27%       0.472      0.544
+     LESS_CEN              0.000      -0.746      -8.685    0.09%      -2.090     -0.305      0.354
+           41932.000       8.803       0.047       6.461    0.02%       1.151      2.542
+
+
+THE MODEL ESTIMATION TERMINATED NORMALLY
+
+     USE THE FBITERATIONS OPTION TO INCREASE THE NUMBER OF ITERATIONS BY A FACTOR
+     OF AT LEAST TWO TO CHECK CONVERGENCE AND THAT THE PSR VALUE DOES NOT INCREASE.
+
+
+
+MODEL FIT INFORMATION
+
+Number of Free Parameters                              51
+
+Bayesian Posterior Predictive Checking using Chi-Square
+
+          95% Confidence Interval for the Difference Between
+          the Observed and the Replicated Chi-Square Values
+
+                               6444.930          7070.190
+
+          Posterior Predictive P-Value              0.000
+
+
+
+MODEL RESULTS
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+
+Within Level
+
+ CAROWN     ON
+    AGE_CEN            0.035       0.001      0.000       0.034       0.037      *
+    GEN_CEN            0.080       0.014      0.000       0.053       0.106      *
+    INC_CEN            0.005       0.000      0.000       0.005       0.006      *
+    EDUH_CEN           0.369       0.015      0.000       0.340       0.399      *
+    EMP_CEN            0.502       0.014      0.000       0.474       0.529      *
+    LESS_CEN          -0.003       0.002      0.067      -0.008       0.001
+    CARPR_ID           0.170       0.005      0.000       0.160       0.179      *
+
+ CARPR_ID   ON
+    AGE_CEN           -0.024       0.001      0.000      -0.025      -0.022      *
+    GEN_CEN            0.132       0.016      0.000       0.101       0.163      *
+    INC_CEN            0.002       0.000      0.000       0.002       0.003      *
+    EDUH_CEN           0.052       0.017      0.001       0.017       0.085      *
+    EMP_CEN           -0.009       0.017      0.292      -0.041       0.025
+    LESS_CEN           0.025       0.003      0.000       0.020       0.031      *
+    Q01D               0.241       0.006      0.000       0.228       0.252      *
+    LOGMILES           0.016       0.010      0.048      -0.003       0.035
+
+ Q01D       ON
+    AGE_CEN           -0.004       0.001      0.000      -0.006      -0.002      *
+    GEN_CEN            0.125       0.019      0.000       0.088       0.162      *
+    INC_CEN            0.000       0.000      0.102       0.000       0.001
+    EDUH_CEN           0.020       0.021      0.172      -0.020       0.062
+    EMP_CEN            0.052       0.020      0.006       0.012       0.091      *
+    LESS_CEN          -0.017       0.003      0.000      -0.024      -0.011      *
+    CAROWN             1.330       0.020      0.000       1.291       1.368      *
+
+ LOGMILES   ON
+    AGE_CEN            0.005       0.001      0.000       0.003       0.006      *
+    GEN_CEN            0.158       0.013      0.000       0.133       0.184      *
+    INC_CEN            0.002       0.000      0.000       0.001       0.002      *
+    EDUH_CEN           0.015       0.014      0.147      -0.013       0.044
+    EMP_CEN            0.079       0.014      0.000       0.053       0.106      *
+    LESS_CEN          -0.010       0.002      0.000      -0.014      -0.005      *
+    CAROWN             0.066       0.009      0.000       0.048       0.083      *
+
+ LOGMILES WITH
+    Q01D               0.059       0.010      0.000       0.038       0.079      *
+
+ Means
+    INC_CEN           -0.162       0.166      0.164      -0.491       0.155
+    EDUH_CEN          -0.001       0.002      0.343      -0.006       0.004
+
+ Intercepts
+    CARPR_ID           0.001       0.008      0.446      -0.014       0.016
+
+ Variances
+    INC_CEN          998.453       7.572      0.000     983.449    1013.284      *
+    EDUH_CEN           0.235       0.002      0.000       0.232       0.238      *
+
+ Residual Variances
+    CARPR_ID           2.352       0.017      0.000       2.318       2.385      *
+    LOGMILES           0.971       0.009      0.000       0.954       0.989      *
+
+Between Level
+
+ LOGMILES WITH
+    Q01D               0.024       0.026      0.154      -0.025       0.079
+    CAROWN             0.014       0.017      0.178      -0.017       0.049
+    CARPR_CO          -0.004       0.021      0.424      -0.045       0.036
+
+ Q01D     WITH
+    CAROWN             0.381       0.086      0.000       0.255       0.597      *
+    CARPR_CO          -0.111       0.081      0.060      -0.287       0.029
+
+ CAROWN   WITH
+    CARPR_CO          -0.076       0.052      0.050      -0.193       0.013
+
+ Means
+    CARPR_CO           0.005       0.093      0.477      -0.180       0.187
+    LOGMILES           3.080       0.030      0.000       3.020       3.139      *
+
+ Thresholds
+    CAROWN$1           0.136       0.075      0.035      -0.012       0.284
+    Q01D$1             0.498       0.116      0.000       0.275       0.727      *
+
+ Variances
+    CAROWN             0.273       0.057      0.000       0.188       0.412      *
+    Q01D               0.672       0.144      0.000       0.460       1.022      *
+    CARPR_CO           0.433       0.092      0.000       0.303       0.661      *
+    LOGMILES           0.043       0.009      0.000       0.030       0.066      *
+
+New/Additional Parameters
+    B1IND              0.225       0.007      0.000       0.211       0.240      *
+    B2IND              0.011       0.002      0.000       0.008       0.014      *
+
+
+STANDARDIZED MODEL RESULTS
+
+
+STDYX Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+Within Level
+
+ CAROWN     ON
+    AGE_CEN            0.337       0.005      0.000       0.327       0.347      *
+    GEN_CEN            0.032       0.005      0.000       0.021       0.043      *
+    INC_CEN            0.134       0.006      0.000       0.122       0.146      *
+    EDUH_CEN           0.144       0.006      0.000       0.133       0.156      *
+    EMP_CEN            0.198       0.005      0.000       0.187       0.209      *
+    LESS_CEN          -0.008       0.006      0.067      -0.020       0.003
+    CARPR_ID           0.232       0.006      0.000       0.220       0.244      *
+
+ CARPR_ID   ON
+    AGE_CEN           -0.163       0.005      0.000      -0.172      -0.154      *
+    GEN_CEN            0.039       0.005      0.000       0.029       0.048      *
+    INC_CEN            0.039       0.005      0.000       0.029       0.049      *
+    EDUH_CEN           0.015       0.005      0.001       0.005       0.024      *
+    EMP_CEN           -0.003       0.005      0.292      -0.012       0.007
+    LESS_CEN           0.045       0.005      0.000       0.036       0.054      *
+    Q01D               0.278       0.007      0.000       0.263       0.292      *
+    LOGMILES           0.009       0.006      0.048      -0.002       0.021
+
+ Q01D       ON
+    AGE_CEN           -0.024       0.005      0.000      -0.034      -0.014      *
+    GEN_CEN            0.032       0.005      0.000       0.022       0.041      *
+    INC_CEN            0.007       0.005      0.102      -0.004       0.017
+    EDUH_CEN           0.005       0.005      0.172      -0.005       0.015
+    EMP_CEN            0.013       0.005      0.006       0.003       0.023      *
+    LESS_CEN          -0.026       0.005      0.000      -0.036      -0.016      *
+    CAROWN             0.842       0.005      0.000       0.833       0.851      *
+
+ LOGMILES   ON
+    AGE_CEN            0.053       0.007      0.000       0.039       0.067      *
+    GEN_CEN            0.078       0.006      0.000       0.066       0.091      *
+    INC_CEN            0.048       0.007      0.000       0.035       0.061      *
+    EDUH_CEN           0.007       0.007      0.147      -0.007       0.021
+    EMP_CEN            0.039       0.007      0.000       0.026       0.052      *
+    LESS_CEN          -0.029       0.007      0.000      -0.042      -0.015      *
+    CAROWN             0.082       0.011      0.000       0.060       0.103      *
+
+ LOGMILES WITH
+    Q01D               0.059       0.010      0.000       0.039       0.080      *
+
+ Means
+    INC_CEN           -0.005       0.005      0.164      -0.016       0.005
+    EDUH_CEN          -0.002       0.005      0.343      -0.012       0.008
+
+ Intercepts
+    CARPR_ID           0.001       0.005      0.446      -0.008       0.010
+
+ Variances
+    INC_CEN            1.000       0.000      0.000       1.000       1.000
+    EDUH_CEN           1.000       0.000      0.000       1.000       1.000
+
+ Residual Variances
+    CARPR_ID           0.817       0.007      0.000       0.803       0.830      *
+    LOGMILES           0.970       0.003      0.000       0.965       0.975      *
+
+Between Level
+
+ LOGMILES WITH
+    Q01D               0.145       0.140      0.154      -0.143       0.404
+    CAROWN             0.136       0.140      0.178      -0.155       0.393
+    CARPR_CO          -0.028       0.141      0.424      -0.298       0.247
+
+ Q01D     WITH
+    CAROWN             0.892       0.030      0.000       0.819       0.937      *
+    CARPR_CO          -0.211       0.131      0.060      -0.457       0.057
+
+ CAROWN   WITH
+    CARPR_CO          -0.225       0.130      0.050      -0.471       0.042
+
+ Means
+    CARPR_CO           0.008       0.139      0.477      -0.271       0.282
+    LOGMILES          14.823       1.514      0.000      12.012      17.883      *
+
+ Thresholds
+    CAROWN$1           0.259       0.143      0.035      -0.021       0.542
+    Q01D$1             0.612       0.152      0.000       0.324       0.914      *
+
+ Variances
+    CAROWN             1.000       0.000      0.000       1.000       1.000
+    Q01D               1.000       0.000      0.000       1.000       1.000
+    CARPR_CO           1.000       0.000      0.000       1.000       1.000
+    LOGMILES           1.000       0.000      0.000       1.000       1.000
+
+
+STDY Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+Within Level
+
+ CAROWN     ON
+    AGE_CEN            0.029       0.000      0.000       0.028       0.029      *
+    GEN_CEN            0.065       0.011      0.000       0.043       0.086      *
+    INC_CEN            0.134       0.006      0.000       0.122       0.146      *
+    EDUH_CEN           0.144       0.006      0.000       0.133       0.156      *
+    EMP_CEN            0.405       0.011      0.000       0.383       0.426      *
+    LESS_CEN          -0.003       0.002      0.067      -0.007       0.001
+    CARPR_ID           0.232       0.006      0.000       0.220       0.244      *
+
+ CARPR_ID   ON
+    AGE_CEN           -0.014       0.000      0.000      -0.015      -0.013      *
+    GEN_CEN            0.078       0.009      0.000       0.059       0.096      *
+    INC_CEN            0.039       0.005      0.000       0.029       0.049      *
+    EDUH_CEN           0.015       0.005      0.001       0.005       0.024      *
+    EMP_CEN           -0.005       0.010      0.292      -0.024       0.015
+    LESS_CEN           0.015       0.002      0.000       0.012       0.018      *
+    Q01D               0.278       0.007      0.000       0.263       0.292      *
+    LOGMILES           0.009       0.006      0.048      -0.002       0.021
+
+ Q01D       ON
+    AGE_CEN           -0.002       0.000      0.000      -0.003      -0.001      *
+    GEN_CEN            0.064       0.010      0.000       0.045       0.083      *
+    INC_CEN            0.007       0.005      0.102      -0.004       0.017
+    EDUH_CEN           0.005       0.005      0.172      -0.005       0.015
+    EMP_CEN            0.026       0.010      0.006       0.006       0.047      *
+    LESS_CEN          -0.009       0.002      0.000      -0.012      -0.006      *
+    CAROWN             0.842       0.005      0.000       0.833       0.851      *
+
+ LOGMILES   ON
+    AGE_CEN            0.005       0.001      0.000       0.003       0.006      *
+    GEN_CEN            0.158       0.013      0.000       0.133       0.184      *
+    INC_CEN            0.048       0.007      0.000       0.035       0.061      *
+    EDUH_CEN           0.007       0.007      0.147      -0.007       0.021
+    EMP_CEN            0.079       0.013      0.000       0.053       0.106      *
+    LESS_CEN          -0.010       0.002      0.000      -0.014      -0.005      *
+    CAROWN             0.082       0.011      0.000       0.060       0.103      *
+
+ LOGMILES WITH
+    Q01D               0.059       0.010      0.000       0.039       0.080      *
+
+ Means
+    INC_CEN           -0.005       0.005      0.164      -0.016       0.005
+    EDUH_CEN          -0.002       0.005      0.343      -0.012       0.008
+
+ Intercepts
+    CARPR_ID           0.001       0.005      0.446      -0.008       0.010
+
+ Variances
+    INC_CEN            1.000       0.000      0.000       1.000       1.000
+    EDUH_CEN           1.000       0.000      0.000       1.000       1.000
+
+ Residual Variances
+    CARPR_ID           0.817       0.007      0.000       0.803       0.830      *
+    LOGMILES           0.970       0.003      0.000       0.965       0.975      *
+
+Between Level
+
+ LOGMILES WITH
+    Q01D               0.145       0.140      0.154      -0.143       0.404
+    CAROWN             0.136       0.140      0.178      -0.155       0.393
+    CARPR_CO          -0.028       0.141      0.424      -0.298       0.247
+
+ Q01D     WITH
+    CAROWN             0.892       0.030      0.000       0.819       0.937      *
+    CARPR_CO          -0.211       0.131      0.060      -0.457       0.057
+
+ CAROWN   WITH
+    CARPR_CO          -0.225       0.130      0.050      -0.471       0.042
+
+ Means
+    CARPR_CO           0.008       0.139      0.477      -0.271       0.282
+    LOGMILES          14.823       1.514      0.000      12.012      17.883      *
+
+ Thresholds
+    CAROWN$1           0.259       0.143      0.035      -0.021       0.542
+    Q01D$1             0.612       0.152      0.000       0.324       0.914      *
+
+ Variances
+    CAROWN             1.000       0.000      0.000       1.000       1.000
+    Q01D               1.000       0.000      0.000       1.000       1.000
+    CARPR_CO           1.000       0.000      0.000       1.000       1.000
+    LOGMILES           1.000       0.000      0.000       1.000       1.000
+
+
+STD Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+Within Level
+
+ CAROWN     ON
+    AGE_CEN            0.035       0.001      0.000       0.034       0.037      *
+    GEN_CEN            0.080       0.014      0.000       0.053       0.106      *
+    INC_CEN            0.005       0.000      0.000       0.005       0.006      *
+    EDUH_CEN           0.369       0.015      0.000       0.340       0.399      *
+    EMP_CEN            0.502       0.014      0.000       0.474       0.529      *
+    LESS_CEN          -0.003       0.002      0.067      -0.008       0.001
+    CARPR_ID           0.170       0.005      0.000       0.160       0.179      *
+
+ CARPR_ID   ON
+    AGE_CEN           -0.024       0.001      0.000      -0.025      -0.022      *
+    GEN_CEN            0.132       0.016      0.000       0.101       0.163      *
+    INC_CEN            0.002       0.000      0.000       0.002       0.003      *
+    EDUH_CEN           0.052       0.017      0.001       0.017       0.085      *
+    EMP_CEN           -0.009       0.017      0.292      -0.041       0.025
+    LESS_CEN           0.025       0.003      0.000       0.020       0.031      *
+    Q01D               0.241       0.006      0.000       0.228       0.252      *
+    LOGMILES           0.016       0.010      0.048      -0.003       0.035
+
+ Q01D       ON
+    AGE_CEN           -0.004       0.001      0.000      -0.006      -0.002      *
+    GEN_CEN            0.125       0.019      0.000       0.088       0.162      *
+    INC_CEN            0.000       0.000      0.102       0.000       0.001
+    EDUH_CEN           0.020       0.021      0.172      -0.020       0.062
+    EMP_CEN            0.052       0.020      0.006       0.012       0.091      *
+    LESS_CEN          -0.017       0.003      0.000      -0.024      -0.011      *
+    CAROWN             1.330       0.020      0.000       1.291       1.368      *
+
+ LOGMILES   ON
+    AGE_CEN            0.005       0.001      0.000       0.003       0.006      *
+    GEN_CEN            0.158       0.013      0.000       0.133       0.184      *
+    INC_CEN            0.002       0.000      0.000       0.001       0.002      *
+    EDUH_CEN           0.015       0.014      0.147      -0.013       0.044
+    EMP_CEN            0.079       0.014      0.000       0.053       0.106      *
+    LESS_CEN          -0.010       0.002      0.000      -0.014      -0.005      *
+    CAROWN             0.066       0.009      0.000       0.048       0.083      *
+
+ LOGMILES WITH
+    Q01D               0.059       0.010      0.000       0.039       0.080      *
+
+ Means
+    INC_CEN           -0.162       0.166      0.164      -0.491       0.155
+    EDUH_CEN          -0.001       0.002      0.343      -0.006       0.004
+
+ Intercepts
+    CARPR_ID           0.001       0.008      0.446      -0.014       0.016
+
+ Variances
+    INC_CEN          998.453       7.572      0.000     983.449    1013.284      *
+    EDUH_CEN           0.235       0.002      0.000       0.232       0.238      *
+
+ Residual Variances
+    CARPR_ID           2.352       0.017      0.000       2.318       2.385      *
+    LOGMILES           0.971       0.009      0.000       0.954       0.989      *
+
+Between Level
+
+ LOGMILES WITH
+    Q01D               0.145       0.140      0.154      -0.143       0.404
+    CAROWN             0.136       0.140      0.178      -0.155       0.393
+    CARPR_CO          -0.028       0.141      0.424      -0.298       0.247
+
+ Q01D     WITH
+    CAROWN             0.892       0.030      0.000       0.819       0.937      *
+    CARPR_CO          -0.211       0.131      0.060      -0.457       0.057
+
+ CAROWN   WITH
+    CARPR_CO          -0.225       0.130      0.050      -0.471       0.042
+
+ Means
+    CARPR_CO           0.005       0.093      0.477      -0.180       0.187
+    LOGMILES           3.080       0.030      0.000       3.020       3.139      *
+
+ Thresholds
+    CAROWN$1           0.136       0.075      0.035      -0.012       0.284
+    Q01D$1             0.498       0.116      0.000       0.275       0.727      *
+
+ Variances
+    CAROWN             0.273       0.057      0.000       0.188       0.412      *
+    Q01D               0.672       0.144      0.000       0.460       1.022      *
+    CARPR_CO           0.433       0.092      0.000       0.303       0.661      *
+    LOGMILES           0.043       0.009      0.000       0.030       0.066      *
+
+
+R-SQUARE
+
+Within Level
+
+                                Posterior  One-Tailed         95% C.I.
+    Variable        Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%
+
+    CAROWN             0.349       0.006      0.000       0.338       0.361
+    Q01D               0.739       0.006      0.000       0.728       0.750
+    CARPR_ID           0.183       0.007      0.000       0.170       0.197
+    LOGMILES           0.030       0.003      0.000       0.025       0.035
+
+Between Level
+
+
+TECHNICAL 1 OUTPUT
+
+
+     PARAMETER SPECIFICATION FOR WITHIN
+
+
+           TAU
+              CAROWN$1      Q01D$1
+              ________      ________
+                    0             0
+
+
+           NU
+              CAROWN        Q01D          CARPR_ID      INC_CEN       EDUH_CEN
+              ________      ________      ________      ________      ________
+                    0             0             0             0             0
+
+
+           NU
+              LOGMILES      AGE_CEN       GEN_CEN       EMP_CEN       LESS_CEN
+              ________      ________      ________      ________      ________
+                    0             0             0             0             0
+
+
+           LAMBDA
+              CAROWN        Q01D          CARPR_ID      INC_CEN       EDUH_CEN
+              ________      ________      ________      ________      ________
+ CAROWN             0             0             0             0             0
+ Q01D               0             0             0             0             0
+ CARPR_ID           0             0             0             0             0
+ INC_CEN            0             0             0             0             0
+ EDUH_CEN           0             0             0             0             0
+ LOGMILES           0             0             0             0             0
+ AGE_CEN            0             0             0             0             0
+ GEN_CEN            0             0             0             0             0
+ EMP_CEN            0             0             0             0             0
+ LESS_CEN           0             0             0             0             0
+
+
+           LAMBDA
+              LOGMILES      AGE_CEN       GEN_CEN       EMP_CEN       LESS_CEN
+              ________      ________      ________      ________      ________
+ CAROWN             0             0             0             0             0
+ Q01D               0             0             0             0             0
+ CARPR_ID           0             0             0             0             0
+ INC_CEN            0             0             0             0             0
+ EDUH_CEN           0             0             0             0             0
+ LOGMILES           0             0             0             0             0
+ AGE_CEN            0             0             0             0             0
+ GEN_CEN            0             0             0             0             0
+ EMP_CEN            0             0             0             0             0
+ LESS_CEN           0             0             0             0             0
+
+
+           THETA
+              CAROWN        Q01D          CARPR_ID      INC_CEN       EDUH_CEN
+              ________      ________      ________      ________      ________
+ CAROWN             0
+ Q01D               0             0
+ CARPR_ID           0             0             0
+ INC_CEN            0             0             0             0
+ EDUH_CEN           0             0             0             0             0
+ LOGMILES           0             0             0             0             0
+ AGE_CEN            0             0             0             0             0
+ GEN_CEN            0             0             0             0             0
+ EMP_CEN            0             0             0             0             0
+ LESS_CEN           0             0             0             0             0
+
+
+           THETA
+              LOGMILES      AGE_CEN       GEN_CEN       EMP_CEN       LESS_CEN
+              ________      ________      ________      ________      ________
+ LOGMILES           0
+ AGE_CEN            0             0
+ GEN_CEN            0             0             0
+ EMP_CEN            0             0             0             0
+ LESS_CEN           0             0             0             0             0
+
+
+           ALPHA
+              CAROWN        Q01D          CARPR_ID      INC_CEN       EDUH_CEN
+              ________      ________      ________      ________      ________
+                    0             0             1             2             3
+
+
+           ALPHA
+              LOGMILES      AGE_CEN       GEN_CEN       EMP_CEN       LESS_CEN
+              ________      ________      ________      ________      ________
+                    0             0             0             0             0
+
+
+           BETA
+              CAROWN        Q01D          CARPR_ID      INC_CEN       EDUH_CEN
+              ________      ________      ________      ________      ________
+ CAROWN             0             0             4             5             6
+ Q01D              11             0             0            12            13
+ CARPR_ID           0            18             0            19            20
+ INC_CEN            0             0             0             0             0
+ EDUH_CEN           0             0             0             0             0
+ LOGMILES          26             0             0            27            28
+ AGE_CEN            0             0             0             0             0
+ GEN_CEN            0             0             0             0             0
+ EMP_CEN            0             0             0             0             0
+ LESS_CEN           0             0             0             0             0
+
+
+           BETA
+              LOGMILES      AGE_CEN       GEN_CEN       EMP_CEN       LESS_CEN
+              ________      ________      ________      ________      ________
+ CAROWN             0             7             8             9            10
+ Q01D               0            14            15            16            17
+ CARPR_ID          21            22            23            24            25
+ INC_CEN            0             0             0             0             0
+ EDUH_CEN           0             0             0             0             0
+ LOGMILES           0            29            30            31            32
+ AGE_CEN            0             0             0             0             0
+ GEN_CEN            0             0             0             0             0
+ EMP_CEN            0             0             0             0             0
+ LESS_CEN           0             0             0             0             0
+
+
+           PSI
+              CAROWN        Q01D          CARPR_ID      INC_CEN       EDUH_CEN
+              ________      ________      ________      ________      ________
+ CAROWN             0
+ Q01D               0             0
+ CARPR_ID           0             0            33
+ INC_CEN            0             0             0            34
+ EDUH_CEN           0             0             0             0            35
+ LOGMILES           0            36             0             0             0
+ AGE_CEN            0             0             0             0             0
+ GEN_CEN            0             0             0             0             0
+ EMP_CEN            0             0             0             0             0
+ LESS_CEN           0             0             0             0             0
+
+
+           PSI
+              LOGMILES      AGE_CEN       GEN_CEN       EMP_CEN       LESS_CEN
+              ________      ________      ________      ________      ________
+ LOGMILES          37
+ AGE_CEN            0             0
+ GEN_CEN            0             0             0
+ EMP_CEN            0             0             0             0
+ LESS_CEN           0             0             0             0             0
+
+
+     PARAMETER SPECIFICATION FOR BETWEEN
+
+
+           TAU
+              CAROWN$1      Q01D$1
+              ________      ________
+                   50            51
+
+
+           NU
+              CAROWN        Q01D          CARPR_CO      LOGMILES
+              ________      ________      ________      ________
+                    0             0             0             0
+
+
+           LAMBDA
+              CAROWN        Q01D          CARPR_CO      LOGMILES
+              ________      ________      ________      ________
+ CAROWN             0             0             0             0
+ Q01D               0             0             0             0
+ CARPR_CO           0             0             0             0
+ LOGMILES           0             0             0             0
+
+
+           THETA
+              CAROWN        Q01D          CARPR_CO      LOGMILES
+              ________      ________      ________      ________
+ CAROWN             0
+ Q01D               0             0
+ CARPR_CO           0             0             0
+ LOGMILES           0             0             0             0
+
+
+           ALPHA
+              CAROWN        Q01D          CARPR_CO      LOGMILES
+              ________      ________      ________      ________
+                    0             0            38            39
+
+
+           BETA
+              CAROWN        Q01D          CARPR_CO      LOGMILES
+              ________      ________      ________      ________
+ CAROWN             0             0             0             0
+ Q01D               0             0             0             0
+ CARPR_CO           0             0             0             0
+ LOGMILES           0             0             0             0
+
+
+           PSI
+              CAROWN        Q01D          CARPR_CO      LOGMILES
+              ________      ________      ________      ________
+ CAROWN            40
+ Q01D              41            42
+ CARPR_CO          43            44            45
+ LOGMILES          46            47            48            49
+
+
+     PARAMETER SPECIFICATION FOR THE ADDITIONAL PARAMETERS
+
+
+           NEW/ADDITIONAL PARAMETERS
+              B1IND         B2IND
+              ________      ________
+                   52            53
+
+
+     STARTING VALUES FOR WITHIN
+
+
+           TAU
+              CAROWN$1      Q01D$1
+              ________      ________
+                0.000         0.000
+
+
+           NU
+              CAROWN        Q01D          CARPR_ID      INC_CEN       EDUH_CEN
+              ________      ________      ________      ________      ________
+                0.000         0.000         0.000         0.000         0.000
+
+
+           NU
+              LOGMILES      AGE_CEN       GEN_CEN       EMP_CEN       LESS_CEN
+              ________      ________      ________      ________      ________
+                0.000         0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              CAROWN        Q01D          CARPR_ID      INC_CEN       EDUH_CEN
+              ________      ________      ________      ________      ________
+ CAROWN         1.000         0.000         0.000         0.000         0.000
+ Q01D           0.000         1.000         0.000         0.000         0.000
+ CARPR_ID       0.000         0.000         1.000         0.000         0.000
+ INC_CEN        0.000         0.000         0.000         1.000         0.000
+ EDUH_CEN       0.000         0.000         0.000         0.000         1.000
+ LOGMILES       0.000         0.000         0.000         0.000         0.000
+ AGE_CEN        0.000         0.000         0.000         0.000         0.000
+ GEN_CEN        0.000         0.000         0.000         0.000         0.000
+ EMP_CEN        0.000         0.000         0.000         0.000         0.000
+ LESS_CEN       0.000         0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              LOGMILES      AGE_CEN       GEN_CEN       EMP_CEN       LESS_CEN
+              ________      ________      ________      ________      ________
+ CAROWN         0.000         0.000         0.000         0.000         0.000
+ Q01D           0.000         0.000         0.000         0.000         0.000
+ CARPR_ID       0.000         0.000         0.000         0.000         0.000
+ INC_CEN        0.000         0.000         0.000         0.000         0.000
+ EDUH_CEN       0.000         0.000         0.000         0.000         0.000
+ LOGMILES       1.000         0.000         0.000         0.000         0.000
+ AGE_CEN        0.000         1.000         0.000         0.000         0.000
+ GEN_CEN        0.000         0.000         1.000         0.000         0.000
+ EMP_CEN        0.000         0.000         0.000         1.000         0.000
+ LESS_CEN       0.000         0.000         0.000         0.000         1.000
+
+
+           THETA
+              CAROWN        Q01D          CARPR_ID      INC_CEN       EDUH_CEN
+              ________      ________      ________      ________      ________
+ CAROWN         0.000
+ Q01D           0.000         0.000
+ CARPR_ID       0.000         0.000         0.000
+ INC_CEN        0.000         0.000         0.000         0.000
+ EDUH_CEN       0.000         0.000         0.000         0.000         0.000
+ LOGMILES       0.000         0.000         0.000         0.000         0.000
+ AGE_CEN        0.000         0.000         0.000         0.000         0.000
+ GEN_CEN        0.000         0.000         0.000         0.000         0.000
+ EMP_CEN        0.000         0.000         0.000         0.000         0.000
+ LESS_CEN       0.000         0.000         0.000         0.000         0.000
+
+
+           THETA
+              LOGMILES      AGE_CEN       GEN_CEN       EMP_CEN       LESS_CEN
+              ________      ________      ________      ________      ________
+ LOGMILES       0.000
+ AGE_CEN        0.000         0.000
+ GEN_CEN        0.000         0.000         0.000
+ EMP_CEN        0.000         0.000         0.000         0.000
+ LESS_CEN       0.000         0.000         0.000         0.000         0.000
+
+
+           ALPHA
+              CAROWN        Q01D          CARPR_ID      INC_CEN       EDUH_CEN
+              ________      ________      ________      ________      ________
+                0.000         0.000         0.000         0.000         0.000
+
+
+           ALPHA
+              LOGMILES      AGE_CEN       GEN_CEN       EMP_CEN       LESS_CEN
+              ________      ________      ________      ________      ________
+                0.000         0.000         0.000         0.000         0.000
+
+
+           BETA
+              CAROWN        Q01D          CARPR_ID      INC_CEN       EDUH_CEN
+              ________      ________      ________      ________      ________
+ CAROWN         0.000         0.000         0.000         0.000         0.000
+ Q01D           0.000         0.000         0.000         0.000         0.000
+ CARPR_ID       0.000         0.000         0.000         0.000         0.000
+ INC_CEN        0.000         0.000         0.000         0.000         0.000
+ EDUH_CEN       0.000         0.000         0.000         0.000         0.000
+ LOGMILES       0.000         0.000         0.000         0.000         0.000
+ AGE_CEN        0.000         0.000         0.000         0.000         0.000
+ GEN_CEN        0.000         0.000         0.000         0.000         0.000
+ EMP_CEN        0.000         0.000         0.000         0.000         0.000
+ LESS_CEN       0.000         0.000         0.000         0.000         0.000
+
+
+           BETA
+              LOGMILES      AGE_CEN       GEN_CEN       EMP_CEN       LESS_CEN
+              ________      ________      ________      ________      ________
+ CAROWN         0.000         0.000         0.000         0.000         0.000
+ Q01D           0.000         0.000         0.000         0.000         0.000
+ CARPR_ID       0.000         0.000         0.000         0.000         0.000
+ INC_CEN        0.000         0.000         0.000         0.000         0.000
+ EDUH_CEN       0.000         0.000         0.000         0.000         0.000
+ LOGMILES       0.000         0.000         0.000         0.000         0.000
+ AGE_CEN        0.000         0.000         0.000         0.000         0.000
+ GEN_CEN        0.000         0.000         0.000         0.000         0.000
+ EMP_CEN        0.000         0.000         0.000         0.000         0.000
+ LESS_CEN       0.000         0.000         0.000         0.000         0.000
+
+
+           PSI
+              CAROWN        Q01D          CARPR_ID      INC_CEN       EDUH_CEN
+              ________      ________      ________      ________      ________
+ CAROWN         1.000
+ Q01D           0.000         1.000
+ CARPR_ID       0.000         0.000         1.298
+ INC_CEN        0.000         0.000         0.000       499.639
+ EDUH_CEN       0.000         0.000         0.000         0.000         0.118
+ LOGMILES       0.000         0.000         0.000         0.000         0.000
+ AGE_CEN        0.000         0.000         0.000         0.000         0.000
+ GEN_CEN        0.000         0.000         0.000         0.000         0.000
+ EMP_CEN        0.000         0.000         0.000         0.000         0.000
+ LESS_CEN       0.000         0.000         0.000         0.000         0.000
+
+
+           PSI
+              LOGMILES      AGE_CEN       GEN_CEN       EMP_CEN       LESS_CEN
+              ________      ________      ________      ________      ________
+ LOGMILES       0.507
+ AGE_CEN        0.000        69.334
+ GEN_CEN        0.000         0.000         0.124
+ EMP_CEN        0.000         0.000         0.000         0.120
+ LESS_CEN       0.000         0.000         0.000         0.000         4.402
+
+
+     STARTING VALUES FOR BETWEEN
+
+
+           TAU
+              CAROWN$1      Q01D$1
+              ________      ________
+                0.032         0.164
+
+
+           NU
+              CAROWN        Q01D          CARPR_CO      LOGMILES
+              ________      ________      ________      ________
+                0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              CAROWN        Q01D          CARPR_CO      LOGMILES
+              ________      ________      ________      ________
+ CAROWN         1.000         0.000         0.000         0.000
+ Q01D           0.000         1.000         0.000         0.000
+ CARPR_CO       0.000         0.000         1.000         0.000
+ LOGMILES       0.000         0.000         0.000         1.000
+
+
+           THETA
+              CAROWN        Q01D          CARPR_CO      LOGMILES
+              ________      ________      ________      ________
+ CAROWN         0.000
+ Q01D           0.000         0.000
+ CARPR_CO       0.000         0.000         0.000
+ LOGMILES       0.000         0.000         0.000         0.000
+
+
+           ALPHA
+              CAROWN        Q01D          CARPR_CO      LOGMILES
+              ________      ________      ________      ________
+                0.000         0.000        -0.040         3.157
+
+
+           BETA
+              CAROWN        Q01D          CARPR_CO      LOGMILES
+              ________      ________      ________      ________
+ CAROWN         0.000         0.000         0.000         0.000
+ Q01D           0.000         0.000         0.000         0.000
+ CARPR_CO       0.000         0.000         0.000         0.000
+ LOGMILES       0.000         0.000         0.000         0.000
+
+
+           PSI
+              CAROWN        Q01D          CARPR_CO      LOGMILES
+              ________      ________      ________      ________
+ CAROWN         1.000
+ Q01D           0.000         1.000
+ CARPR_CO       0.000         0.000         0.191
+ LOGMILES       0.000         0.000         0.000         0.507
+
+
+     STARTING VALUES FOR THE ADDITIONAL PARAMETERS
+
+
+           NEW/ADDITIONAL PARAMETERS
+              B1IND         B2IND
+              ________      ________
+                0.500         0.500
+
+
+
+     PRIORS FOR ALL PARAMETERS            PRIOR MEAN      PRIOR VARIANCE     PRIOR STD. DEV.
+
+     Parameter 1~N(0.000,infinity)           0.0000            infinity            infinity
+     Parameter 2~N(0.000,infinity)           0.0000            infinity            infinity
+     Parameter 3~N(0.000,infinity)           0.0000            infinity            infinity
+     Parameter 4~N(0.000,5.000)              0.0000              5.0000              2.2361
+     Parameter 5~N(0.000,5.000)              0.0000              5.0000              2.2361
+     Parameter 6~N(0.000,5.000)              0.0000              5.0000              2.2361
+     Parameter 7~N(0.000,5.000)              0.0000              5.0000              2.2361
+     Parameter 8~N(0.000,5.000)              0.0000              5.0000              2.2361
+     Parameter 9~N(0.000,5.000)              0.0000              5.0000              2.2361
+     Parameter 10~N(0.000,5.000)             0.0000              5.0000              2.2361
+     Parameter 11~N(0.000,5.000)             0.0000              5.0000              2.2361
+     Parameter 12~N(0.000,5.000)             0.0000              5.0000              2.2361
+     Parameter 13~N(0.000,5.000)             0.0000              5.0000              2.2361
+     Parameter 14~N(0.000,5.000)             0.0000              5.0000              2.2361
+     Parameter 15~N(0.000,5.000)             0.0000              5.0000              2.2361
+     Parameter 16~N(0.000,5.000)             0.0000              5.0000              2.2361
+     Parameter 17~N(0.000,5.000)             0.0000              5.0000              2.2361
+     Parameter 18~N(0.000,infinity)          0.0000            infinity            infinity
+     Parameter 19~N(0.000,infinity)          0.0000            infinity            infinity
+     Parameter 20~N(0.000,infinity)          0.0000            infinity            infinity
+     Parameter 21~N(0.000,infinity)          0.0000            infinity            infinity
+     Parameter 22~N(0.000,infinity)          0.0000            infinity            infinity
+     Parameter 23~N(0.000,infinity)          0.0000            infinity            infinity
+     Parameter 24~N(0.000,infinity)          0.0000            infinity            infinity
+     Parameter 25~N(0.000,infinity)          0.0000            infinity            infinity
+     Parameter 26~N(0.000,infinity)          0.0000            infinity            infinity
+     Parameter 27~N(0.000,infinity)          0.0000            infinity            infinity
+     Parameter 28~N(0.000,infinity)          0.0000            infinity            infinity
+     Parameter 29~N(0.000,infinity)          0.0000            infinity            infinity
+     Parameter 30~N(0.000,infinity)          0.0000            infinity            infinity
+     Parameter 31~N(0.000,infinity)          0.0000            infinity            infinity
+     Parameter 32~N(0.000,infinity)          0.0000            infinity            infinity
+     Parameter 33~IG(-1.000,0.000)         infinity            infinity            infinity
+     Parameter 34~IG(-1.000,0.000)         infinity            infinity            infinity
+     Parameter 35~IG(-1.000,0.000)         infinity            infinity            infinity
+     Parameter 36~IW(0.000,3)
+     Parameter 37~IW(1.000,3)
+     Parameter 38~N(0.000,infinity)          0.0000            infinity            infinity
+     Parameter 39~N(0.000,infinity)          0.0000            infinity            infinity
+     Parameter 40~IW(1.000,5)              infinity            infinity            infinity
+     Parameter 41~IW(0.000,5)              infinity            infinity            infinity
+     Parameter 42~IW(1.000,5)              infinity            infinity            infinity
+     Parameter 43~IW(0.000,5)              infinity            infinity            infinity
+     Parameter 44~IW(0.000,5)              infinity            infinity            infinity
+     Parameter 45~IW(1.000,5)              infinity            infinity            infinity
+     Parameter 46~IW(0.000,5)              infinity            infinity            infinity
+     Parameter 47~IW(0.000,5)              infinity            infinity            infinity
+     Parameter 48~IW(0.000,5)              infinity            infinity            infinity
+     Parameter 49~IW(1.000,5)              infinity            infinity            infinity
+     Parameter 50~N(0.000,5.000)             0.0000              5.0000              2.2361
+     Parameter 51~N(0.000,5.000)             0.0000              5.0000              2.2361
+
+
+RESULTS SAVING INFORMATION
+
+  Order of data
+
+    Parameter estimates
+     (saved in order shown in Technical 1 output)
+    Standard errors
+     (saved in order shown in Technical 1 output)
+    StdYX standardized coefficients
+     (saved in order shown in Technical 1 output)
+    Standard errors for StdYX standardized coefficients
+     (saved in order shown in Technical 1 output)
+    StdY standardized coefficients
+     (saved in order shown in Technical 1 output)
+    Standard errors for StdY standardized coefficients
+     (saved in order shown in Technical 1 output)
+    Std standardized coefficients
+     (saved in order shown in Technical 1 output)
+    Standard errors for Std standardized coefficients
+     (saved in order shown in Technical 1 output)
+    Number of Free Parameters
+    Posterior Predictie P-Value
+
+  Save file
+    Model3_caruse_bayes_results.dat
+
+  Save file format           Free
+
+
+DIAGRAM INFORMATION
+
+  Mplus diagrams are currently not available for multilevel analysis.
+  No diagram output was produced.
+
+
+     Beginning Time:  20:29:27
+        Ending Time:  21:00:39
+       Elapsed Time:  00:31:12
+
+
+
+MUTHEN & MUTHEN
+3463 Stoner Ave.
+Los Angeles, CA  90066
+
+Tel: (310) 391-9971
+Fax: (310) 391-8971
+Web: www.StatModel.com
+Support: Support@StatModel.com
+
+Copyright (c) 1998-2018 Muthen & Muthen
