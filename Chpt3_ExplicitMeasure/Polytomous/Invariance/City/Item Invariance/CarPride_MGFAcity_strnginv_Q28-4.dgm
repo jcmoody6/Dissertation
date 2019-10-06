@@ -1,0 +1,142 @@
+VERSION 1.1.0
+INPUT
+TITLE:
+ Car Pride by City -- Strong Invariance, Q28_4
+
+DATA:
+     FILE = 20190407_CarPride_CarUse_SEM.txt;
+VARIABLE:
+     NAMES ARE
+         R_ID City Age Female White
+         HHPers HHWkPers Educ FullTime
+         Student HHIncome HHCars
+         CarOwner Avg_VO License PTPass
+         TT_CAR TT_PT PT_AV CarCost DriveAlone
+         CarAlone_Freq CarPool_Freq CarAlone_WB CarPool_WB
+         Q28_2 Q28_3 Q28_4 Q28_5 Q28_6 Q28_8 Q28_9
+         Q51_1 Q51_2 Q51_3 Q51_4 Q51_5 Q51_6
+         Q31_1 Q31_2 Q31_3 Q31_4 Q31_5
+         Q53_5 Q53_6 Q53_7 Q53_8 Q53_9
+         Q43_1 Q43_2 Q43_3 Q43_4 Q43_5 Q43_6 Q43_7 Q43_8
+         Q54_1 Q54_2 Q54_3 Q54_4 Q54_6 Q54_7 Q54_8
+         DW D;
+ USEVARIABLES ARE
+     Q28_3 Q28_4 Q28_6 Q51_3
+       Q51_4 Q51_5 Q31_1 Q31_2
+       Q31_3 Q31_4 Q53_6 Q53_9;
+         IDVARIABLE IS R_ID;
+ MISSING = ALL (-9999);
+         GROUPING = CITY (1 = NYC 2 = HOU);
+ANALYSIS:
+ ESTIMATOR = MLR;
+ TYPE = mgroup;
+MODEL:
+        CarPride BY Q28_3@1
+          Q28_4 (l2)
+          Q28_6 Q51_3
+      Q51_4 Q51_5 Q31_1 Q31_2
+        Q31_3 Q31_4 Q53_6 Q53_9;
+        Q28_3 WITH Q28_6;
+        Q51_3 WITH Q51_4 Q51_5;
+        Q51_4 WITH Q51_5;
+        Q31_4 WITH Q31_2;
+        [CarPride@0]
+        [Q28_3  Q28_6 Q51_3];
+        [Q51_4  Q51_5 Q31_1 Q31_2];
+        [Q31_3  Q31_4 Q53_6 Q53_9];
+        [Q28_4] (i);
+MODEL NYC:
+        CarPride BY Q28_3@1
+          Q28_6 Q51_3
+      Q51_4 Q51_5 Q31_1 Q31_2
+        Q31_3 Q31_4 Q53_6 Q53_9;
+        Q28_3 WITH Q28_6;
+        Q51_3 WITH Q51_4 Q51_5;
+        Q51_4 WITH Q51_5;
+        Q31_4 WITH Q31_2;
+        [Q28_3  Q28_6 Q51_3];
+        [Q51_4  Q51_5 Q31_1 Q31_2];
+        [Q31_3  Q31_4 Q53_6 Q53_9];
+INPUT_END
+2
+0
+0
+0
+MLR
+1
+GENERAL
+2
+NYC
+HOU
+12
+1
+0
+q28_3 q28_4 q28_6 q51_3 q51_4 q51_5 q31_1 q31_2 q31_3 q31_4 q53_6 q53_9 carpride
+1
+-1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 0
+0
+1
+carpride
+q28_3 q28_4 q28_6 q51_3 q51_4 q51_5 q31_1 q31_2 q31_3 q31_4 q53_6 q53_9
+1 1 carpride q28_3    1.000    0.000
+1 1 carpride q28_4    1.123    0.045
+91 1 carpride q28_4 l2
+1 1 carpride q28_6    0.989    0.037
+1 1 carpride q51_3    1.036    0.046
+1 1 carpride q51_4    1.095    0.050
+1 1 carpride q51_5    1.120    0.050
+1 1 carpride q31_1    1.085    0.056
+1 1 carpride q31_2    1.064    0.050
+1 1 carpride q31_3    1.103    0.055
+1 1 carpride q31_4    1.052    0.052
+1 1 carpride q53_6    1.083    0.045
+1 1 carpride q53_9    1.060    0.049
+2 1 q28_3 q28_6    0.620    0.097
+2 1 q51_3 q51_4    0.844    0.093
+2 1 q51_3 q51_5    0.561    0.092
+2 1 q51_4 q51_5    1.051    0.106
+2 1 q31_4 q31_2    0.387    0.070
+4 1 q28_3    1.376    0.111
+4 1 q28_4    1.809    0.135
+4 1 q28_6    1.549    0.125
+4 1 q51_3    1.559    0.113
+4 1 q51_4    1.782    0.111
+4 1 q51_5    1.601    0.113
+4 1 q31_1    1.001    0.094
+4 1 q31_2    0.954    0.084
+4 1 q31_3    1.234    0.101
+4 1 q31_4    1.037    0.086
+4 1 q53_6    0.808    0.070
+4 1 q53_9    1.057    0.075
+5 1 carpride    1.776    0.152
+1 2 carpride q28_3    1.000    0.000
+1 2 carpride q28_4    1.123    0.045
+91 2 carpride q28_4 l2
+1 2 carpride q28_6    1.080    0.075
+1 2 carpride q51_3    0.988    0.077
+1 2 carpride q51_4    0.988    0.080
+1 2 carpride q51_5    1.060    0.079
+1 2 carpride q31_1    1.186    0.082
+1 2 carpride q31_2    1.243    0.081
+1 2 carpride q31_3    1.191    0.097
+1 2 carpride q31_4    1.125    0.092
+1 2 carpride q53_6    1.136    0.072
+1 2 carpride q53_9    1.203    0.092
+2 2 q28_3 q28_6    0.483    0.117
+2 2 q51_3 q51_4    1.288    0.126
+2 2 q51_3 q51_5    1.053    0.140
+2 2 q51_4 q51_5    1.301    0.130
+2 2 q31_4 q31_2    0.320    0.101
+4 2 q28_3    1.402    0.131
+4 2 q28_4    2.182    0.167
+4 2 q28_6    1.560    0.173
+4 2 q51_3    1.825    0.147
+4 2 q51_4    2.063    0.135
+4 2 q51_5    1.993    0.141
+4 2 q31_1    1.151    0.120
+4 2 q31_2    0.963    0.107
+4 2 q31_3    1.492    0.169
+4 2 q31_4    1.030    0.108
+4 2 q53_6    0.759    0.071
+4 2 q53_9    1.402    0.126
+5 2 carpride    1.054    0.130

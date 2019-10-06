@@ -1,0 +1,173 @@
+VERSION 1.1.0
+INPUT
+TITLE:
+ Car Pride by CarOwner -- Weak Invariance, Q53_6
+
+DATA:
+ FILE = 20190407_CarPride_CarUse_SEM.txt;
+VARIABLE:
+ NAMES ARE
+     R_ID City Age Female White
+     HHPers HHWkPers Educ FullTime
+     Student HHIncome HHCars
+     CarOwner Avg_VO License PTPass
+     TT_CAR TT_PT PT_AV CarCost DriveAlone
+     CarAlone_Freq CarPool_Freq CarAlone_WB CarPool_WB
+     Q28_2 Q28_3 Q28_4 Q28_5 Q28_6 Q28_8 Q28_9
+     Q51_1 Q51_2 Q51_3 Q51_4 Q51_5 Q51_6
+     Q31_1 Q31_2 Q31_3 Q31_4 Q31_5
+     Q53_5 Q53_6 Q53_7 Q53_8 Q53_9
+     Q43_1 Q43_2 Q43_3 Q43_4 Q43_5 Q43_6 Q43_7 Q43_8
+     Q54_1 Q54_2 Q54_3 Q54_4 Q54_6 Q54_7 Q54_8
+     DW D;
+ USEVARIABLES ARE
+     Q28_3 Q28_4 Q28_6 Q51_3
+       Q51_4 Q51_5 Q31_1 Q31_2
+       Q31_3 Q31_4 Q53_6 Q53_9;
+         IDVARIABLE IS R_ID;
+ MISSING = ALL (-9999);
+         GROUPING = CarOwner (1 = Yes 0 = No);
+ANALYSIS:
+ ESTIMATOR = MLR;
+ TYPE = mgroup;
+MODEL:
+      CarPride BY Q28_3@1
+        Q28_4
+        Q28_6
+        Q51_3
+    Q51_4
+    Q51_5
+    Q31_1
+    Q31_2
+      Q31_3
+      Q31_4
+      Q53_6 (l)
+      Q53_9;
+      Q28_3 WITH Q28_6;
+      Q51_3 WITH Q51_4 Q51_5;
+      Q51_4 WITH Q51_5;
+      Q31_4 WITH Q31_2;
+      [CarPride@0]
+      [Q28_3]
+      [Q28_4]
+      [Q28_6]
+      [Q51_3]
+      [Q51_4]
+      [Q51_5]
+      [Q31_1]
+      [Q31_2]
+      [Q31_3]
+      [Q31_4]
+      [Q53_6]
+      [Q53_9];
+MODEL YES:
+      CarPride BY Q28_3@1
+        Q28_4
+        Q28_6
+        Q51_3
+    Q51_4
+    Q51_5
+    Q31_1
+    Q31_2
+      Q31_3
+      Q31_4
+      Q53_9;
+      Q28_3 WITH Q28_6;
+      Q51_3 WITH Q51_4 Q51_5;
+      Q51_4 WITH Q51_5;
+      Q31_4 WITH Q31_2;
+      [Q28_3]
+      [Q28_4]
+      [Q28_6]
+      [Q51_3]
+      [Q51_4]
+      [Q51_5]
+      [Q31_1]
+      [Q31_2]
+      [Q31_3]
+      [Q31_4]
+      [Q53_6]
+      [Q53_9];
+INPUT_END
+2
+0
+0
+0
+MLR
+1
+GENERAL
+2
+NO
+YES
+12
+1
+0
+q28_3 q28_4 q28_6 q51_3 q51_4 q51_5 q31_1 q31_2 q31_3 q31_4 q53_6 q53_9 carpride
+1
+-1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 0
+0
+1
+carpride
+q28_3 q28_4 q28_6 q51_3 q51_4 q51_5 q31_1 q31_2 q31_3 q31_4 q53_6 q53_9
+1 1 carpride q28_3    1.000    0.000
+1 1 carpride q28_4    0.887    0.080
+1 1 carpride q28_6    0.990    0.097
+1 1 carpride q51_3    0.917    0.075
+1 1 carpride q51_4    0.780    0.103
+1 1 carpride q51_5    0.718    0.109
+1 1 carpride q31_1    0.814    0.114
+1 1 carpride q31_2    0.992    0.079
+1 1 carpride q31_3    1.161    0.078
+1 1 carpride q31_4    1.034    0.081
+1 1 carpride q53_6    1.103    0.042
+91 1 carpride q53_6 l
+1 1 carpride q53_9    1.110    0.092
+2 1 q28_3 q28_6    0.762    0.365
+2 1 q51_3 q51_4    0.644    0.210
+2 1 q51_3 q51_5    0.801    0.244
+2 1 q51_4 q51_5    1.224    0.313
+2 1 q31_4 q31_2    0.382    0.221
+4 1 q28_3    1.444    0.342
+4 1 q28_4    1.777    0.293
+4 1 q28_6    2.001    0.483
+4 1 q51_3    1.626    0.293
+4 1 q51_4    1.874    0.304
+4 1 q51_5    1.979    0.300
+4 1 q31_1    1.888    0.324
+4 1 q31_2    1.169    0.248
+4 1 q31_3    0.949    0.187
+4 1 q31_4    1.029    0.230
+4 1 q53_6    0.729    0.146
+4 1 q53_9    1.354    0.247
+5 1 carpride    2.152    0.271
+1 2 carpride q28_3    1.000    0.000
+1 2 carpride q28_4    1.190    0.053
+1 2 carpride q28_6    1.049    0.040
+1 2 carpride q51_3    1.074    0.051
+1 2 carpride q51_4    1.130    0.055
+1 2 carpride q51_5    1.191    0.055
+1 2 carpride q31_1    1.205    0.053
+1 2 carpride q31_2    1.157    0.052
+1 2 carpride q31_3    1.156    0.060
+1 2 carpride q31_4    1.088    0.054
+1 2 carpride q53_6    1.103    0.042
+91 2 carpride q53_6 l
+1 2 carpride q53_9    1.134    0.051
+2 2 q28_3 q28_6    0.565    0.076
+2 2 q51_3 q51_4    1.120    0.085
+2 2 q51_3 q51_5    0.789    0.085
+2 2 q51_4 q51_5    1.186    0.088
+2 2 q31_4 q31_2    0.369    0.059
+4 2 q28_3    1.398    0.087
+4 2 q28_4    1.981    0.115
+4 2 q28_6    1.521    0.103
+4 2 q51_3    1.714    0.096
+4 2 q51_4    1.973    0.093
+4 2 q51_5    1.748    0.094
+4 2 q31_1    0.939    0.069
+4 2 q31_2    0.946    0.069
+4 2 q31_3    1.359    0.096
+4 2 q31_4    1.043    0.070
+4 2 q53_6    0.762    0.051
+4 2 q53_9    1.172    0.069
+5 2 carpride    1.271    0.105

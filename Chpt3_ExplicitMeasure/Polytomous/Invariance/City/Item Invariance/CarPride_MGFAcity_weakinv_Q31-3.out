@@ -1,0 +1,529 @@
+Mplus VERSION 8.1 (Mac)
+MUTHEN & MUTHEN
+04/08/2019   2:01 PM
+
+INPUT INSTRUCTIONS
+
+  TITLE: Car Pride by City -- Weak Invariance, Q31_1
+  !      (equal factor loadings)
+
+  DATA:
+      	FILE = 20190407_CarPride_CarUse_SEM.txt;
+
+  VARIABLE:
+      	NAMES ARE
+      	    R_ID	City	Age	Female	White	
+      	    HHPers	HHWkPers	Educ	FullTime	
+      	    Student	HHIncome	HHCars	
+      	    CarOwner	Avg_VO	License	PTPass	
+      	    TT_CAR	TT_PT	PT_AV	CarCost	DriveAlone	
+      	    CarAlone_Freq	CarPool_Freq	CarAlone_WB	CarPool_WB	
+      	    Q28_2	Q28_3	Q28_4	Q28_5	Q28_6	Q28_8	Q28_9	
+      	    Q51_1	Q51_2	Q51_3	Q51_4	Q51_5	Q51_6	
+      	    Q31_1	Q31_2	Q31_3	Q31_4	Q31_5	
+      	    Q53_5	Q53_6	Q53_7	Q53_8	Q53_9	
+      	    Q43_1	Q43_2	Q43_3	Q43_4	Q43_5	Q43_6	Q43_7	Q43_8	
+      	    Q54_1	Q54_2	Q54_3	Q54_4	Q54_6	Q54_7	Q54_8	
+      	    DW	D;
+
+  	USEVARIABLES ARE
+  	    Q28_3 Q28_4 Q28_6 Q51_3	
+    	    Q51_4 Q51_5 Q31_1 Q31_2
+    	    Q31_3 Q31_4 Q53_6 Q53_9;
+
+           IDVARIABLE IS R_ID;
+
+  	MISSING = ALL (-9999);
+
+           GROUPING = CITY (1 = NYC 2 = HOU);
+
+  ANALYSIS:
+  	ESTIMATOR = MLR;
+  	TYPE = mgroup;
+
+  	
+  MODEL:
+      ! Define the latent variable by its indicators
+          CarPride BY Q28_3@1 	
+          		Q28_4
+          		Q28_6
+          		Q51_3
+      		Q51_4
+      		Q51_5
+      		Q31_1
+      		Q31_2
+        		Q31_3 (l9)
+        		Q31_4
+        		Q53_6
+        		Q53_9;
+
+          Q28_3 WITH Q28_6;
+          Q51_3 WITH Q51_4 Q51_5;
+          Q51_4 WITH Q51_5;
+          Q31_4 WITH Q31_2;
+
+          [CarPride@0]
+          [Q28_3  Q28_4 Q28_6 Q51_3];
+          [Q51_4  Q51_5 Q31_1 Q31_2];
+          [Q31_3  Q31_4 Q53_6 Q53_9];
+
+    MODEL NYC:
+          CarPride BY Q28_3@1	
+          		Q28_4
+          		Q28_6
+          		Q51_3
+      		Q51_4
+      		Q51_5
+      		Q31_1
+      		Q31_2
+        		!Q31_3
+        		Q31_4
+        		Q53_6
+        		Q53_9;
+
+          Q28_3 WITH Q28_6;
+          Q51_3 WITH Q51_4 Q51_5;
+          Q51_4 WITH Q51_5;
+          Q31_4 WITH Q31_2;
+
+          [Q28_3  Q28_4 Q28_6 Q51_3];
+          [Q51_4  Q51_5 Q31_1 Q31_2];
+          [Q31_3  Q31_4 Q53_6 Q53_9];
+
+
+
+*** WARNING
+  Data set contains cases with missing on all variables.
+  These cases were not included in the analysis.
+  Number of cases with missing on all variables:  14
+   1 WARNING(S) FOUND IN THE INPUT INSTRUCTIONS
+
+
+
+Car Pride by City -- Weak Invariance, Q31_1
+
+SUMMARY OF ANALYSIS
+
+Number of groups                                                 2
+Number of observations
+   Group NYC                                                   766
+   Group HOU                                                   470
+   Total sample size                                          1236
+
+Number of dependent variables                                   12
+Number of independent variables                                  0
+Number of continuous latent variables                            1
+
+Observed dependent variables
+
+  Continuous
+   Q28_3       Q28_4       Q28_6       Q51_3       Q51_4       Q51_5
+   Q31_1       Q31_2       Q31_3       Q31_4       Q53_6       Q53_9
+
+Continuous latent variables
+   CARPRIDE
+
+Variables with special functions
+
+  Grouping variable     CITY
+  ID variable           R_ID
+
+Estimator                                                      MLR
+Information matrix                                        OBSERVED
+Maximum number of iterations                                  1000
+Convergence criterion                                    0.500D-04
+Maximum number of steepest descent iterations                   20
+Maximum number of iterations for H1                           2000
+Convergence criterion for H1                             0.100D-03
+
+Input data file(s)
+  20190407_CarPride_CarUse_SEM.txt
+
+Input data format  FREE
+
+
+SUMMARY OF DATA
+
+   Group NYC
+     Number of missing data patterns            54
+
+   Group HOU
+     Number of missing data patterns            19
+
+
+COVARIANCE COVERAGE OF DATA
+
+Minimum covariance coverage value   0.100
+
+
+     PROPORTION OF DATA PRESENT FOR NYC
+
+
+           Covariance Coverage
+              Q28_3         Q28_4         Q28_6         Q51_3         Q51_4
+              ________      ________      ________      ________      ________
+ Q28_3          0.918
+ Q28_4          0.911         0.923
+ Q28_6          0.911         0.918         0.932
+ Q51_3          0.909         0.913         0.920         0.945
+ Q51_4          0.907         0.911         0.919         0.933         0.939
+ Q51_5          0.898         0.907         0.911         0.924         0.922
+ Q31_1          0.911         0.916         0.924         0.935         0.928
+ Q31_2          0.913         0.918         0.926         0.937         0.931
+ Q31_3          0.909         0.914         0.920         0.933         0.927
+ Q31_4          0.910         0.915         0.920         0.933         0.927
+ Q53_6          0.896         0.903         0.910         0.916         0.913
+ Q53_9          0.909         0.914         0.922         0.932         0.926
+
+
+           Covariance Coverage
+              Q51_5         Q31_1         Q31_2         Q31_3         Q31_4
+              ________      ________      ________      ________      ________
+ Q51_5          0.931
+ Q31_1          0.919         0.984
+ Q31_2          0.922         0.980         0.984
+ Q31_3          0.918         0.975         0.977         0.978
+ Q31_4          0.918         0.974         0.977         0.975         0.977
+ Q53_6          0.906         0.944         0.945         0.944         0.941
+ Q53_9          0.916         0.960         0.961         0.960         0.958
+
+
+           Covariance Coverage
+              Q53_6         Q53_9
+              ________      ________
+ Q53_6          0.952
+ Q53_9          0.943         0.967
+
+
+     PROPORTION OF DATA PRESENT FOR HOU
+
+
+           Covariance Coverage
+              Q28_3         Q28_4         Q28_6         Q51_3         Q51_4
+              ________      ________      ________      ________      ________
+ Q28_3          0.985
+ Q28_4          0.983         0.985
+ Q28_6          0.981         0.981         0.983
+ Q51_3          0.981         0.979         0.977         0.989
+ Q51_4          0.972         0.972         0.968         0.977         0.979
+ Q51_5          0.979         0.979         0.977         0.979         0.972
+ Q31_1          0.985         0.985         0.983         0.989         0.979
+ Q31_2          0.983         0.983         0.981         0.987         0.977
+ Q31_3          0.981         0.981         0.979         0.985         0.974
+ Q31_4          0.985         0.985         0.983         0.989         0.979
+ Q53_6          0.979         0.979         0.977         0.983         0.972
+ Q53_9          0.981         0.981         0.979         0.985         0.974
+
+
+           Covariance Coverage
+              Q51_5         Q31_1         Q31_2         Q31_3         Q31_4
+              ________      ________      ________      ________      ________
+ Q51_5          0.983
+ Q31_1          0.983         1.000
+ Q31_2          0.981         0.998         0.998
+ Q31_3          0.979         0.996         0.994         0.996
+ Q31_4          0.983         1.000         0.998         0.996         1.000
+ Q53_6          0.977         0.991         0.989         0.987         0.991
+ Q53_9          0.979         0.996         0.994         0.991         0.996
+
+
+           Covariance Coverage
+              Q53_6         Q53_9
+              ________      ________
+ Q53_6          0.991
+ Q53_9          0.989         0.996
+
+
+
+UNIVARIATE SAMPLE STATISTICS
+
+
+     UNIVARIATE HIGHER-ORDER MOMENT DESCRIPTIVE STATISTICS FOR NYC
+
+         Variable/         Mean/     Skewness/   Minimum/ % with                Percentiles
+        Sample Size      Variance    Kurtosis    Maximum  Min/Max      20%/60%    40%/80%    Median
+
+     Q28_3                 0.785      -0.650      -3.000    7.54%       0.000      0.000      1.000
+             703.000       3.144      -0.453       3.000   17.78%       2.000      2.000
+     Q28_4                -0.236       0.048      -3.000   19.52%      -2.000     -1.000      0.000
+             707.000       3.937      -1.210       3.000   10.33%       0.000      2.000
+     Q28_6                 0.440      -0.435      -3.000    9.94%      -1.000      0.000      1.000
+             714.000       3.246      -0.705       3.000   13.31%       1.000      2.000
+     Q51_3                 0.116      -0.107      -3.000   10.50%      -2.000      0.000      0.000
+             724.000       3.398      -0.999       3.000   11.74%       0.000      2.000
+     Q51_4                -0.417       0.261      -3.000   19.33%      -2.000     -1.000      0.000
+             719.000       3.851      -1.087       3.000   10.85%       0.000      2.000
+     Q51_5                -0.355       0.096      -3.000   19.07%      -2.000     -1.000      0.000
+             713.000       3.758      -1.210       3.000    8.13%       0.000      2.000
+     Q31_1                 0.597      -0.580      -3.000    8.22%      -1.000      0.000      1.000
+             754.000       3.095      -0.540       3.000   13.53%       1.000      2.000
+     Q31_2                 0.615      -0.572      -3.000    7.69%       0.000      0.000      1.000
+             754.000       2.948      -0.456       3.000   12.73%       1.000      2.000
+     Q31_3                 0.437      -0.466      -3.000   10.68%      -2.000      0.000      1.000
+             749.000       3.389      -0.805       3.000   12.68%       1.000      2.000
+     Q31_4                 0.497      -0.474      -3.000    8.02%      -1.000      0.000      1.000
+             748.000       2.993      -0.605       3.000   11.63%       1.000      2.000
+     Q53_6                 0.808      -0.688      -3.000    7.00%       0.000      1.000      1.000
+             729.000       2.888      -0.214       3.000   16.60%       1.000      2.000
+     Q53_9                 0.583      -0.585      -3.000    8.64%      -1.000      0.000      1.000
+             741.000       3.037      -0.498       3.000   12.42%       1.000      2.000
+
+
+     UNIVARIATE HIGHER-ORDER MOMENT DESCRIPTIVE STATISTICS FOR HOU
+
+         Variable/         Mean/     Skewness/   Minimum/ % with                Percentiles
+        Sample Size      Variance    Kurtosis    Maximum  Min/Max      20%/60%    40%/80%    Median
+
+     Q28_3                 1.140      -0.882      -3.000    4.32%       0.000      1.000      2.000
+             463.000       2.401       0.369       3.000   19.44%       2.000      2.000
+     Q28_4                -0.302       0.101      -3.000   17.49%      -2.000     -1.000      0.000
+             463.000       3.593      -1.039       3.000    9.94%       0.000      1.000
+     Q28_6                 0.677      -0.530      -3.000    6.93%       0.000      0.000      1.000
+             462.000       2.768      -0.260       3.000   15.37%       1.000      2.000
+     Q51_3                -0.206       0.075      -3.000   11.18%      -2.000      0.000      0.000
+             465.000       2.861      -0.674       3.000    7.53%       0.000      1.000
+     Q51_4                -0.811       0.455      -3.000   21.30%      -3.000     -2.000     -1.000
+             460.000       3.097      -0.738       3.000    5.00%       0.000      1.000
+     Q51_5                -0.556       0.212      -3.000   18.61%      -2.000     -1.000      0.000
+             462.000       3.186      -0.939       3.000    5.41%       0.000      1.000
+     Q31_1                 0.762      -0.664      -3.000    5.96%       0.000      1.000      1.000
+             470.000       2.633      -0.096       3.000   14.04%       1.000      2.000
+     Q31_2                 0.793      -0.541      -3.000    4.69%       0.000      0.000      1.000
+             469.000       2.595      -0.268       3.000   15.99%       1.000      2.000
+     Q31_3                 0.536      -0.479      -3.000    7.48%      -1.000      0.000      1.000
+             468.000       2.984      -0.569       3.000   13.25%       1.000      2.000
+     Q31_4                 0.796      -0.569      -3.000    3.83%       0.000      0.000      1.000
+             470.000       2.363      -0.142       3.000   12.98%       1.000      2.000
+     Q53_6                 1.094      -0.792      -3.000    2.58%       0.000      1.000      1.000
+             466.000       2.124       0.409       3.000   17.17%       2.000      2.000
+     Q53_9                 0.850      -0.610      -3.000    5.77%       0.000      1.000      1.000
+             468.000       2.918      -0.385       3.000   19.44%       2.000      2.000
+
+
+THE MODEL ESTIMATION TERMINATED NORMALLY
+
+
+
+MODEL FIT INFORMATION
+
+Number of Free Parameters                       81
+
+Loglikelihood
+
+          H0 Value                      -23247.595
+          H0 Scaling Correction Factor      1.3263
+            for MLR
+          H1 Value                      -22963.019
+          H1 Scaling Correction Factor      1.3752
+            for MLR
+
+Information Criteria
+
+          Akaike (AIC)                   46657.189
+          Bayesian (BIC)                 47071.880
+          Sample-Size Adjusted BIC       46814.588
+            (n* = (n + 2) / 24)
+
+Chi-Square Test of Model Fit
+
+          Value                            402.199*
+          Degrees of Freedom                    99
+          P-Value                           0.0000
+          Scaling Correction Factor         1.4151
+            for MLR
+
+Chi-Square Contribution From Each Group
+
+          NYC                              254.032
+          HOU                              148.167
+
+*   The chi-square value for MLM, MLMV, MLR, ULSMV, WLSM and WLSMV cannot be used
+    for chi-square difference testing in the regular way.  MLM, MLR and WLSM
+    chi-square difference testing is described on the Mplus website.  MLMV, WLSMV,
+    and ULSMV difference testing is done using the DIFFTEST option.
+
+RMSEA (Root Mean Square Error Of Approximation)
+
+          Estimate                           0.070
+          90 Percent C.I.                    0.063  0.078
+          Probability RMSEA <= .05           0.000
+
+CFI/TLI
+
+          CFI                                0.956
+          TLI                                0.941
+
+Chi-Square Test of Model Fit for the Baseline Model
+
+          Value                           6959.479
+          Degrees of Freedom                   132
+          P-Value                           0.0000
+
+SRMR (Standardized Root Mean Square Residual)
+
+          Value                              0.042
+
+
+
+MODEL RESULTS
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Group NYC
+
+ CARPRIDE BY
+    Q28_3              1.000      0.000    999.000    999.000
+    Q28_4              1.118      0.049     22.800      0.000
+    Q28_6              0.993      0.038     26.455      0.000
+    Q51_3              1.043      0.047     22.097      0.000
+    Q51_4              1.103      0.052     21.182      0.000
+    Q51_5              1.128      0.052     21.810      0.000
+    Q31_1              1.093      0.055     19.851      0.000
+    Q31_2              1.072      0.049     22.042      0.000
+    Q31_3              1.125      0.051     21.909      0.000
+    Q31_4              1.061      0.050     21.115      0.000
+    Q53_6              1.091      0.045     24.338      0.000
+    Q53_9              1.069      0.048     22.292      0.000
+
+ Q28_3    WITH
+    Q28_6              0.623      0.097      6.427      0.000
+
+ Q51_3    WITH
+    Q51_4              0.846      0.093      9.063      0.000
+    Q51_5              0.563      0.092      6.137      0.000
+
+ Q51_4    WITH
+    Q51_5              1.053      0.106      9.900      0.000
+
+ Q31_4    WITH
+    Q31_2              0.385      0.069      5.545      0.000
+
+ Means
+    CARPRIDE           0.000      0.000    999.000    999.000
+
+ Intercepts
+    Q28_3              0.712      0.067     10.697      0.000
+    Q28_4             -0.310      0.073     -4.244      0.000
+    Q28_6              0.380      0.067      5.660      0.000
+    Q51_3              0.063      0.068      0.922      0.357
+    Q51_4             -0.472      0.072     -6.575      0.000
+    Q51_5             -0.419      0.071     -5.887      0.000
+    Q31_1              0.596      0.064      9.348      0.000
+    Q31_2              0.608      0.062      9.735      0.000
+    Q31_3              0.427      0.067      6.376      0.000
+    Q31_4              0.487      0.063      7.735      0.000
+    Q53_6              0.768      0.062     12.332      0.000
+    Q53_9              0.554      0.064      8.688      0.000
+
+ Variances
+    CARPRIDE           1.748      0.149     11.760      0.000
+
+ Residual Variances
+    Q28_3              1.380      0.110     12.514      0.000
+    Q28_4              1.814      0.135     13.398      0.000
+    Q28_6              1.552      0.125     12.429      0.000
+    Q51_3              1.561      0.113     13.858      0.000
+    Q51_4              1.785      0.111     16.114      0.000
+    Q51_5              1.603      0.113     14.214      0.000
+    Q31_1              1.000      0.094     10.606      0.000
+    Q31_2              0.953      0.084     11.396      0.000
+    Q31_3              1.230      0.100     12.360      0.000
+    Q31_4              1.035      0.086     12.062      0.000
+    Q53_6              0.808      0.070     11.611      0.000
+    Q53_9              1.056      0.075     14.054      0.000
+
+Group HOU
+
+ CARPRIDE BY
+    Q28_3              1.000      0.000    999.000    999.000
+    Q28_4              1.145      0.084     13.643      0.000
+    Q28_6              1.069      0.076     14.048      0.000
+    Q51_3              0.971      0.072     13.525      0.000
+    Q51_4              0.972      0.077     12.551      0.000
+    Q51_5              1.042      0.077     13.463      0.000
+    Q31_1              1.165      0.073     15.872      0.000
+    Q31_2              1.221      0.071     17.212      0.000
+    Q31_3              1.125      0.051     21.909      0.000
+    Q31_4              1.103      0.078     14.182      0.000
+    Q53_6              1.116      0.066     17.021      0.000
+    Q53_9              1.180      0.080     14.675      0.000
+
+ Q28_3    WITH
+    Q28_6              0.477      0.115      4.142      0.000
+
+ Q51_3    WITH
+    Q51_4              1.286      0.126     10.193      0.000
+    Q51_5              1.051      0.141      7.478      0.000
+
+ Q51_4    WITH
+    Q51_5              1.299      0.130      9.975      0.000
+
+ Q31_4    WITH
+    Q31_2              0.323      0.102      3.181      0.001
+
+ Means
+    CARPRIDE           0.000      0.000    999.000    999.000
+
+ Intercepts
+    Q28_3              1.130      0.072     15.715      0.000
+    Q28_4             -0.309      0.088     -3.518      0.000
+    Q28_6              0.670      0.077      8.671      0.000
+    Q51_3             -0.212      0.078     -2.711      0.007
+    Q51_4             -0.810      0.081     -9.942      0.000
+    Q51_5             -0.570      0.083     -6.894      0.000
+    Q31_1              0.762      0.075     10.178      0.000
+    Q31_2              0.792      0.074     10.661      0.000
+    Q31_3              0.536      0.080      6.717      0.000
+    Q31_4              0.796      0.071     11.224      0.000
+    Q53_6              1.094      0.067     16.267      0.000
+    Q53_9              0.848      0.079     10.734      0.000
+
+ Variances
+    CARPRIDE           1.092      0.124      8.835      0.000
+
+ Residual Variances
+    Q28_3              1.397      0.129     10.791      0.000
+    Q28_4              2.168      0.171     12.657      0.000
+    Q28_6              1.554      0.172      9.030      0.000
+    Q51_3              1.824      0.147     12.400      0.000
+    Q51_4              2.062      0.135     15.230      0.000
+    Q51_5              1.991      0.142     14.066      0.000
+    Q31_1              1.152      0.120      9.601      0.000
+    Q31_2              0.965      0.108      8.965      0.000
+    Q31_3              1.508      0.163      9.265      0.000
+    Q31_4              1.034      0.109      9.519      0.000
+    Q53_6              0.758      0.071     10.745      0.000
+    Q53_9              1.405      0.126     11.138      0.000
+
+
+QUALITY OF NUMERICAL RESULTS
+
+     Condition Number for the Information Matrix              0.746E-02
+       (ratio of smallest to largest eigenvalue)
+
+
+DIAGRAM INFORMATION
+
+  Use View Diagram under the Diagram menu in the Mplus Editor to view the diagram.
+  If running Mplus from the Mplus Diagrammer, the diagram opens automatically.
+
+  Diagram output
+    /Users/jcmoody/Dropbox (MIT)/Joanna_Jinhua/Papers/CarPride_Validation_CarOwn/Analysis/20190217_MGFA/CarPride_MGFAcit
+
+     Beginning Time:  14:01:14
+        Ending Time:  14:01:15
+       Elapsed Time:  00:00:01
+
+
+
+MUTHEN & MUTHEN
+3463 Stoner Ave.
+Los Angeles, CA  90066
+
+Tel: (310) 391-9971
+Fax: (310) 391-8971
+Web: www.StatModel.com
+Support: Support@StatModel.com
+
+Copyright (c) 1998-2018 Muthen & Muthen

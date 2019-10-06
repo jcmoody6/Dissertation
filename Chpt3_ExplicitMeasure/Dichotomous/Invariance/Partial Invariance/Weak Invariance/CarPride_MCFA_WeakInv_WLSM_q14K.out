@@ -1,0 +1,376 @@
+Mplus VERSION 8.1
+MUTHEN & MUTHEN
+01/07/2019   5:59 PM
+
+INPUT INSTRUCTIONS
+
+  TITLE:	Multilevel CFA - Dichotomous Car Pride Scale
+
+  DATA:	
+  	FILE IS CarPrideItems.txt;
+
+  VARIABLE:	
+  	NAMES ARE
+  	R_ID iso_num
+  	q14A	q14B	q14C	q14D	q14E	
+  	q14F	q14G	q14H	q14I	q14J	
+  	q14K	q14L	q15A	q15B	q15C	
+  	q15D	q15E	q15F;
+
+    USEVARIABLES ARE
+     	iso_num
+      	q14A q14B q14F q14K
+      	q15A q15B q15C q15D q15F;
+
+    CATEGORICAL ARE
+           q14A q14B q14F q14K	
+      	 q15A q15B q15C q15D q15F;
+    WITHIN = ;
+    BETWEEN = ;
+
+    CLUSTER = iso_num;
+    IDVARIABLE = R_ID;	
+    MISSING = ALL (-9999);
+
+  ANALYSIS:
+      TYPE = TWOLEVEL;
+      ESTIMATOR = WLSM;
+      PROCESSORS = 4;
+
+  MODEL:
+      %WITHIN%
+      CarPr_Id BY q14A@1
+      	   q14B
+      	   q14F
+      	   q14K (f4)
+      	   q15A
+      	   q15B
+      	   q15C
+      	   q15D
+      	   q15F;
+      CarPr_Id*;
+
+      %BETWEEN%
+      CarPr_Co BY q14A@1
+              q14B
+              q14F
+              q14K (f4)
+              q15A
+              q15B
+              q15C
+              q15D
+              q15F;
+      CarPr_CO*;
+      q14K*;
+
+  OUTPUT:
+      SVALUES;
+
+
+
+INPUT READING TERMINATED NORMALLY
+
+
+
+Multilevel CFA - Dichotomous Car Pride Scale
+
+SUMMARY OF ANALYSIS
+
+Number of groups                                                 1
+Number of observations                                       41932
+
+Number of dependent variables                                    9
+Number of independent variables                                  0
+Number of continuous latent variables                            2
+
+Observed dependent variables
+
+  Binary and ordered categorical (ordinal)
+   Q14A        Q14B        Q14F        Q14K        Q15A        Q15B
+   Q15C        Q15D        Q15F
+
+Continuous latent variables
+   CARPR_ID    CARPR_CO
+
+Variables with special functions
+
+  Cluster variable      ISO_NUM
+  ID variable           R_ID
+
+Estimator                                                     WLSM
+Optimization Specifications for the Quasi-Newton Algorithm for
+Continuous Outcomes
+  Maximum number of iterations                                1000
+  Convergence criterion                                  0.100D-05
+Optimization Specifications for the EM Algorithm
+  Maximum number of iterations                                 500
+  Convergence criteria
+    Loglikelihood change                                 0.100D-02
+    Relative loglikelihood change                        0.100D-05
+    Derivative                                           0.100D-02
+Optimization Specifications for the M step of the EM Algorithm for
+Categorical Latent variables
+  Number of M step iterations                                    1
+  M step convergence criterion                           0.100D-02
+  Basis for M step termination                           ITERATION
+Optimization Specifications for the M step of the EM Algorithm for
+Censored, Binary or Ordered Categorical (Ordinal), Unordered
+Categorical (Nominal) and Count Outcomes
+  Number of M step iterations                                    1
+  M step convergence criterion                           0.100D-02
+  Basis for M step termination                           ITERATION
+  Maximum value for logit thresholds                            10
+  Minimum value for logit thresholds                           -10
+  Minimum expected cell size for chi-square              0.100D-01
+Maximum number of iterations for H1                           2000
+Convergence criterion for H1                             0.100D-03
+Optimization algorithm                                          FS
+Integration Specifications
+  Type                                                    STANDARD
+  Number of integration points                                   7
+  Dimensions of numerical integration                            2
+  Adaptive quadrature                                           ON
+Link                                                        PROBIT
+Cholesky                                                        ON
+
+Input data file(s)
+  CarPrideItems.txt
+Input data format  FREE
+
+
+SUMMARY OF DATA
+
+     Number of clusters                         51
+
+     Average cluster size      822.196
+
+     Estimated Intraclass Correlations for the Y Variables
+
+                Intraclass              Intraclass              Intraclass
+     Variable  Correlation   Variable  Correlation   Variable  Correlation
+
+     Q14A         0.046      Q14B         0.038      Q14F         0.050
+     Q14K         0.022      Q15A         0.031      Q15B         0.059
+     Q15C         0.072      Q15D         0.086      Q15F         0.032
+
+
+
+COVARIANCE COVERAGE OF DATA
+
+Minimum covariance coverage value   0.100
+
+
+UNIVARIATE PROPORTIONS AND COUNTS FOR CATEGORICAL VARIABLES
+
+    Q14A
+      Category 1    0.895        37543.000
+      Category 2    0.105         4389.000
+    Q14B
+      Category 1    0.898        37640.000
+      Category 2    0.102         4292.000
+    Q14F
+      Category 1    0.947        39709.000
+      Category 2    0.053         2223.000
+    Q14K
+      Category 1    0.966        40521.000
+      Category 2    0.034         1411.000
+    Q15A
+      Category 1    0.862        36154.000
+      Category 2    0.138         5778.000
+    Q15B
+      Category 1    0.754        31608.000
+      Category 2    0.246        10324.000
+    Q15C
+      Category 1    0.799        33505.000
+      Category 2    0.201         8427.000
+    Q15D
+      Category 1    0.792        33231.000
+      Category 2    0.208         8701.000
+    Q15F
+      Category 1    0.878        36825.000
+      Category 2    0.122         5107.000
+
+
+
+THE MODEL ESTIMATION TERMINATED NORMALLY
+
+
+
+MODEL FIT INFORMATION
+
+Number of Free Parameters                       35
+
+Chi-Square Test of Model Fit
+
+          Value                           2013.818*
+          Degrees of Freedom                    55
+          P-Value                           0.0000
+          Scaling Correction Factor         0.5383
+            for WLSM
+
+*   The chi-square value for MLM, MLMV, MLR, ULSMV, WLSM and WLSMV cannot be used
+    for chi-square difference testing in the regular way.  MLM, MLR and WLSM
+    chi-square difference testing is described on the Mplus website.  MLMV, WLSMV,
+    and ULSMV difference testing is done using the DIFFTEST option.
+
+RMSEA (Root Mean Square Error Of Approximation)
+
+          Estimate                           0.029
+
+CFI/TLI
+
+          CFI                                0.978
+          TLI                                0.971
+
+Chi-Square Test of Model Fit for the Baseline Model
+
+          Value                          89261.874
+          Degrees of Freedom                    72
+          P-Value                           0.0000
+
+SRMR (Standardized Root Mean Square Residual)
+
+          Value for Within                   0.050
+          Value for Between                  0.084
+
+
+
+MODEL RESULTS
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Within Level
+
+ CARPR_ID BY
+    Q14A               1.000      0.000    999.000    999.000
+    Q14B               0.864      0.027     32.092      0.000
+    Q14F               0.751      0.015     48.533      0.000
+    Q14K               0.439      0.012     36.352      0.000
+    Q15A               0.746      0.014     53.194      0.000
+    Q15B               0.534      0.012     45.723      0.000
+    Q15C               0.470      0.007     63.806      0.000
+    Q15D               0.427      0.008     50.573      0.000
+    Q15F               0.646      0.015     42.452      0.000
+
+ Variances
+    CARPR_ID           1.767      0.055     32.383      0.000
+
+Between Level
+
+ CARPR_CO BY
+    Q14A               1.000      0.000    999.000    999.000
+    Q14B               0.809      0.167      4.841      0.000
+    Q14F               1.012      0.140      7.250      0.000
+    Q14K               0.439      0.012     36.352      0.000
+    Q15A               0.715      0.116      6.144      0.000
+    Q15B               0.466      0.161      2.890      0.004
+    Q15C               0.847      0.194      4.372      0.000
+    Q15D               0.893      0.154      5.806      0.000
+    Q15F               0.740      0.133      5.552      0.000
+
+ Thresholds
+    Q14A$1             2.095      0.067     31.311      0.000
+    Q14B$1             1.966      0.032     60.834      0.000
+    Q14F$1             2.327      0.054     43.360      0.000
+    Q14K$1             2.144      0.037     57.923      0.000
+    Q15A$1             1.543      0.041     37.984      0.000
+    Q15B$1             0.876      0.045     19.491      0.000
+    Q15C$1             1.012      0.048     20.959      0.000
+    Q15D$1             0.954      0.053     18.047      0.000
+    Q15F$1             1.541      0.033     47.055      0.000
+
+ Variances
+    CARPR_CO           0.082      0.020      4.053      0.000
+
+ Residual Variances
+    Q14A               0.051      0.025      2.075      0.038
+    Q14B               0.039      0.010      3.879      0.000
+    Q14F               0.022      0.009      2.459      0.014
+    Q14K               0.015      0.005      2.927      0.003
+    Q15A               0.021      0.006      3.848      0.000
+    Q15B               0.076      0.016      4.828      0.000
+    Q15C               0.049      0.012      4.283      0.000
+    Q15D               0.059      0.010      6.048      0.000
+    Q15F               0.013      0.007      1.875      0.061
+
+
+QUALITY OF NUMERICAL RESULTS
+
+     Condition Number for the Information Matrix              0.340E-03
+       (ratio of smallest to largest eigenvalue)
+
+
+MODEL COMMAND WITH FINAL ESTIMATES USED AS STARTING VALUES
+
+     %WITHIN%
+
+     carpr_id BY q14a@1;
+     carpr_id BY q14b*0.86436;
+     carpr_id BY q14f*0.75075;
+     carpr_id BY q14k*0.43927 (f4);
+     carpr_id BY q15a*0.74648;
+     carpr_id BY q15b*0.53359;
+     carpr_id BY q15c*0.47045;
+     carpr_id BY q15d*0.42736;
+     carpr_id BY q15f*0.64601;
+
+     carpr_id*1.76672;
+
+     %BETWEEN%
+
+     carpr_co BY q14a@1;
+     carpr_co BY q14b*0.80909;
+     carpr_co BY q14f*1.01179;
+     carpr_co BY q14k*0.43927 (f4);
+     carpr_co BY q15a*0.71529;
+     carpr_co BY q15b*0.46557;
+     carpr_co BY q15c*0.84703;
+     carpr_co BY q15d*0.89264;
+     carpr_co BY q15f*0.74029;
+
+     [ q14a$1*2.09508 ];
+     [ q14b$1*1.96558 ];
+     [ q14f$1*2.32727 ];
+     [ q14k$1*2.14418 ];
+     [ q15a$1*1.54313 ];
+     [ q15b$1*0.87574 ];
+     [ q15c$1*1.01238 ];
+     [ q15d$1*0.95406 ];
+     [ q15f$1*1.54109 ];
+
+     q14a*0.05149;
+     q14b*0.03888;
+     q14f*0.02227;
+     q14k*0.01463;
+     q15a*0.02140;
+     q15b*0.07632;
+     q15c*0.04942;
+     q15d*0.05929;
+     q15f*0.01324;
+     carpr_co*0.08168;
+
+
+
+DIAGRAM INFORMATION
+
+  Mplus diagrams are currently not available for multilevel analysis.
+  No diagram output was produced.
+
+
+     Beginning Time:  17:59:18
+        Ending Time:  18:08:59
+       Elapsed Time:  00:09:41
+
+
+
+MUTHEN & MUTHEN
+3463 Stoner Ave.
+Los Angeles, CA  90066
+
+Tel: (310) 391-9971
+Fax: (310) 391-8971
+Web: www.StatModel.com
+Support: Support@StatModel.com
+
+Copyright (c) 1998-2018 Muthen & Muthen

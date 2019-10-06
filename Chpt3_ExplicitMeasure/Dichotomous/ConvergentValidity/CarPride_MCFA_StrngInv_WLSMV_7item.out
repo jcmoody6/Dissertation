@@ -1,0 +1,552 @@
+Mplus VERSION 8.1
+MUTHEN & MUTHEN
+01/07/2019   7:58 PM
+
+INPUT INSTRUCTIONS
+
+  TITLE:	Multilevel CFA - Dichotomous Car Pride Scale
+
+  DATA:	
+  	FILE IS CarPrideItems.txt;
+
+  VARIABLE:	
+  	NAMES ARE
+  	R_ID iso_num
+  	q14A	q14B	q14C	q14D	q14E	
+  	q14F	q14G	q14H	q14I	q14J	
+  	q14K	q14L	q15A	q15B	q15C	
+  	q15D	q15E	q15F;
+
+    USEVARIABLES ARE
+     	iso_num
+      	q14A q14B q14F q14K
+      	q15A q15B
+          !q15C q15D
+           q15F;
+
+    CATEGORICAL ARE
+           q14A q14B q14F q14K	
+      	 q15A q15B
+           !q15C q15D
+           q15F;
+    WITHIN = ;
+    BETWEEN = ;
+
+    CLUSTER = iso_num;
+    IDVARIABLE = R_ID;	
+    MISSING = ALL (-9999);
+
+  ANALYSIS:
+      TYPE = TWOLEVEL;
+      ESTIMATOR = WLSMV;
+      PROCESSORS = 4;
+
+  MODEL:
+      %WITHIN%
+      CarPr_Id BY q14A@1 (f1)
+      	   q14B (f2)
+      	   q14F (f3)
+      	   q14K (f4)
+      	   q15A (f5)
+      	   q15B (f6)
+      	   !q15C
+      	   !q15D
+      	   q15F(f7);
+      CarPr_Id*;
+
+      %BETWEEN%
+      CarPr_Co BY q14A@1 (f1)
+              q14B (f2)
+              q14F (f3)
+              q14K (f4)
+              q15A (f5)
+              q15B (f6)
+              !q15C
+              !q15D
+              q15F (f7);
+      CarPr_CO*;
+      q14A@0;
+      q14B@0;
+      q14F@0;
+      q14K@0;
+      q15A@0;
+      q15B@0;
+      !q15C@0;
+      !q15D@0;
+      q15F@0;
+
+  OUTPUT:
+      SVALUES STANDARDIZED;
+
+
+
+INPUT READING TERMINATED NORMALLY
+
+
+
+Multilevel CFA - Dichotomous Car Pride Scale
+
+SUMMARY OF ANALYSIS
+
+Number of groups                                                 1
+Number of observations                                       41932
+
+Number of dependent variables                                    7
+Number of independent variables                                  0
+Number of continuous latent variables                            2
+
+Observed dependent variables
+
+  Binary and ordered categorical (ordinal)
+   Q14A        Q14B        Q14F        Q14K        Q15A        Q15B
+   Q15F
+
+Continuous latent variables
+   CARPR_ID    CARPR_CO
+
+Variables with special functions
+
+  Cluster variable      ISO_NUM
+  ID variable           R_ID
+
+Estimator                                                    WLSMV
+Optimization Specifications for the Quasi-Newton Algorithm for
+Continuous Outcomes
+  Maximum number of iterations                                1000
+  Convergence criterion                                  0.100D-05
+Optimization Specifications for the EM Algorithm
+  Maximum number of iterations                                 500
+  Convergence criteria
+    Loglikelihood change                                 0.100D-02
+    Relative loglikelihood change                        0.100D-05
+    Derivative                                           0.100D-02
+Optimization Specifications for the M step of the EM Algorithm for
+Categorical Latent variables
+  Number of M step iterations                                    1
+  M step convergence criterion                           0.100D-02
+  Basis for M step termination                           ITERATION
+Optimization Specifications for the M step of the EM Algorithm for
+Censored, Binary or Ordered Categorical (Ordinal), Unordered
+Categorical (Nominal) and Count Outcomes
+  Number of M step iterations                                    1
+  M step convergence criterion                           0.100D-02
+  Basis for M step termination                           ITERATION
+  Maximum value for logit thresholds                            10
+  Minimum value for logit thresholds                           -10
+  Minimum expected cell size for chi-square              0.100D-01
+Maximum number of iterations for H1                           2000
+Convergence criterion for H1                             0.100D-03
+Optimization algorithm                                          FS
+Integration Specifications
+  Type                                                    STANDARD
+  Number of integration points                                   7
+  Dimensions of numerical integration                            2
+  Adaptive quadrature                                           ON
+Link                                                        PROBIT
+Cholesky                                                        ON
+
+Input data file(s)
+  CarPrideItems.txt
+Input data format  FREE
+
+
+SUMMARY OF DATA
+
+     Number of clusters                         51
+
+     Average cluster size      822.196
+
+     Estimated Intraclass Correlations for the Y Variables
+
+                Intraclass              Intraclass              Intraclass
+     Variable  Correlation   Variable  Correlation   Variable  Correlation
+
+     Q14A         0.046      Q14B         0.038      Q14F         0.050
+     Q14K         0.022      Q15A         0.031      Q15B         0.059
+     Q15F         0.032
+
+
+
+COVARIANCE COVERAGE OF DATA
+
+Minimum covariance coverage value   0.100
+
+
+UNIVARIATE PROPORTIONS AND COUNTS FOR CATEGORICAL VARIABLES
+
+    Q14A
+      Category 1    0.895        37543.000
+      Category 2    0.105         4389.000
+    Q14B
+      Category 1    0.898        37640.000
+      Category 2    0.102         4292.000
+    Q14F
+      Category 1    0.947        39709.000
+      Category 2    0.053         2223.000
+    Q14K
+      Category 1    0.966        40521.000
+      Category 2    0.034         1411.000
+    Q15A
+      Category 1    0.862        36154.000
+      Category 2    0.138         5778.000
+    Q15B
+      Category 1    0.754        31608.000
+      Category 2    0.246        10324.000
+    Q15F
+      Category 1    0.878        36825.000
+      Category 2    0.122         5107.000
+
+
+
+THE MODEL ESTIMATION TERMINATED NORMALLY
+
+
+
+MODEL FIT INFORMATION
+
+Number of Free Parameters                       15
+
+Chi-Square Test of Model Fit
+
+          Value                            457.150*
+          Degrees of Freedom                    41
+          P-Value                           0.0000
+
+*   The chi-square value for MLM, MLMV, MLR, ULSMV, WLSM and WLSMV cannot be used
+    for chi-square difference testing in the regular way.  MLM, MLR and WLSM
+    chi-square difference testing is described on the Mplus website.  MLMV, WLSMV,
+    and ULSMV difference testing is done using the DIFFTEST option.
+
+RMSEA (Root Mean Square Error Of Approximation)
+
+          Estimate                           0.016
+
+CFI/TLI
+
+          CFI                                0.986
+          TLI                                0.986
+
+Chi-Square Test of Model Fit for the Baseline Model
+
+          Value                          30100.091
+          Degrees of Freedom                    42
+          P-Value                           0.0000
+
+SRMR (Standardized Root Mean Square Residual)
+
+          Value for Within                   0.051
+          Value for Between                  0.381
+
+
+
+MODEL RESULTS
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Within Level
+
+ CARPR_ID BY
+    Q14A               1.000      0.000    999.000    999.000
+    Q14B               0.788      0.022     35.626      0.000
+    Q14F               0.744      0.016     47.885      0.000
+    Q14K               0.437      0.012     35.410      0.000
+    Q15A               0.824      0.017     49.519      0.000
+    Q15B               0.508      0.011     45.099      0.000
+    Q15F               0.665      0.014     46.498      0.000
+
+ Variances
+    CARPR_ID           1.756      0.054     32.353      0.000
+
+Between Level
+
+ CARPR_CO BY
+    Q14A               1.000      0.000    999.000    999.000
+    Q14B               0.788      0.022     35.626      0.000
+    Q14F               0.744      0.016     47.885      0.000
+    Q14K               0.437      0.012     35.410      0.000
+    Q15A               0.824      0.017     49.519      0.000
+    Q15B               0.508      0.011     45.099      0.000
+    Q15F               0.665      0.014     46.498      0.000
+
+ Thresholds
+    Q14A$1             2.091      0.066     31.751      0.000
+    Q14B$1             1.866      0.034     55.277      0.000
+    Q14F$1             2.314      0.055     41.976      0.000
+    Q14K$1             2.139      0.038     57.037      0.000
+    Q15A$1             1.622      0.042     38.918      0.000
+    Q15B$1             0.861      0.044     19.664      0.000
+    Q15F$1             1.558      0.035     44.772      0.000
+
+ Variances
+    CARPR_CO           0.099      0.020      5.067      0.000
+
+ Residual Variances
+    Q14A               0.000      0.000    999.000    999.000
+    Q14B               0.000      0.000    999.000    999.000
+    Q14F               0.000      0.000    999.000    999.000
+    Q14K               0.000      0.000    999.000    999.000
+    Q15A               0.000      0.000    999.000    999.000
+    Q15B               0.000      0.000    999.000    999.000
+    Q15F               0.000      0.000    999.000    999.000
+
+
+STANDARDIZED MODEL RESULTS
+
+
+STDYX Standardization
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Within Level
+
+ CARPR_ID BY
+    Q14A               0.798      0.004    178.299      0.000
+    Q14B               0.722      0.008     92.107      0.000
+    Q14F               0.702      0.007    101.286      0.000
+    Q14K               0.501      0.010     51.050      0.000
+    Q15A               0.737      0.005    144.999      0.000
+    Q15B               0.558      0.006     93.230      0.000
+    Q15F               0.661      0.006    117.235      0.000
+
+ Variances
+    CARPR_ID           1.000      0.000    999.000    999.000
+
+Between Level
+
+ CARPR_CO BY
+    Q14A               1.000      0.000    999.000    999.000
+    Q14B               1.000      0.000    999.000    999.000
+    Q14F               1.000      0.000    999.000    999.000
+    Q14K               1.000      0.000    999.000    999.000
+    Q15A               1.000      0.000  *********      0.000
+    Q15B               1.000      0.000  *********      0.000
+    Q15F               1.000      0.000  *********      0.000
+
+ Thresholds
+    Q14A$1             1.260      0.035     36.420      0.000
+    Q14B$1             1.290      0.031     41.891      0.000
+    Q14F$1             1.647      0.035     46.513      0.000
+    Q14K$1             1.852      0.029     63.383      0.000
+    Q15A$1             1.095      0.027     40.172      0.000
+    Q15B$1             0.714      0.036     19.927      0.000
+    Q15F$1             1.169      0.029     40.999      0.000
+
+ Variances
+    CARPR_CO           1.000      0.000    999.000    999.000
+
+ Residual Variances
+    Q14A               0.000    999.000    999.000    999.000
+    Q14B               0.000    999.000    999.000    999.000
+    Q14F               0.000    999.000    999.000    999.000
+    Q14K               0.000    999.000    999.000    999.000
+    Q15A               0.000    999.000    999.000    999.000
+    Q15B               0.000    999.000    999.000    999.000
+    Q15F               0.000    999.000    999.000    999.000
+
+
+STDY Standardization
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Within Level
+
+ CARPR_ID BY
+    Q14A               0.798      0.004    178.299      0.000
+    Q14B               0.722      0.008     92.107      0.000
+    Q14F               0.702      0.007    101.286      0.000
+    Q14K               0.501      0.010     51.050      0.000
+    Q15A               0.737      0.005    144.999      0.000
+    Q15B               0.558      0.006     93.230      0.000
+    Q15F               0.661      0.006    117.235      0.000
+
+ Variances
+    CARPR_ID           1.000      0.000    999.000    999.000
+
+Between Level
+
+ CARPR_CO BY
+    Q14A               1.000      0.000    999.000    999.000
+    Q14B               1.000      0.000    999.000    999.000
+    Q14F               1.000      0.000    999.000    999.000
+    Q14K               1.000      0.000    999.000    999.000
+    Q15A               1.000      0.000  *********      0.000
+    Q15B               1.000      0.000  *********      0.000
+    Q15F               1.000      0.000  *********      0.000
+
+ Thresholds
+    Q14A$1             1.260      0.035     36.420      0.000
+    Q14B$1             1.290      0.031     41.891      0.000
+    Q14F$1             1.647      0.035     46.513      0.000
+    Q14K$1             1.852      0.029     63.383      0.000
+    Q15A$1             1.095      0.027     40.172      0.000
+    Q15B$1             0.714      0.036     19.927      0.000
+    Q15F$1             1.169      0.029     40.999      0.000
+
+ Variances
+    CARPR_CO           1.000      0.000    999.000    999.000
+
+ Residual Variances
+    Q14A             999.000    999.000    999.000    999.000
+    Q14B             999.000    999.000    999.000    999.000
+    Q14F             999.000    999.000    999.000    999.000
+    Q14K             999.000    999.000    999.000    999.000
+    Q15A             999.000    999.000    999.000    999.000
+    Q15B             999.000    999.000    999.000    999.000
+    Q15F             999.000    999.000    999.000    999.000
+
+
+STD Standardization
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Within Level
+
+ CARPR_ID BY
+    Q14A               1.325      0.020     64.706      0.000
+    Q14B               1.044      0.024     44.067      0.000
+    Q14F               0.986      0.019     51.343      0.000
+    Q14K               0.578      0.015     38.251      0.000
+    Q15A               1.092      0.017     66.139      0.000
+    Q15B               0.673      0.010     64.166      0.000
+    Q15F               0.881      0.013     65.995      0.000
+
+ Variances
+    CARPR_ID           1.000      0.000    999.000    999.000
+
+Between Level
+
+ CARPR_CO BY
+    Q14A               0.314      0.031     10.133      0.000
+    Q14B               0.248      0.025     10.013      0.000
+    Q14F               0.234      0.024      9.757      0.000
+    Q14K               0.137      0.014      9.784      0.000
+    Q15A               0.259      0.027      9.729      0.000
+    Q15B               0.160      0.016      9.876      0.000
+    Q15F               0.209      0.021      9.905      0.000
+
+ Thresholds
+    Q14A$1             2.091      0.066     31.751      0.000
+    Q14B$1             1.866      0.034     55.277      0.000
+    Q14F$1             2.314      0.055     41.976      0.000
+    Q14K$1             2.139      0.038     57.037      0.000
+    Q15A$1             1.622      0.042     38.918      0.000
+    Q15B$1             0.861      0.044     19.664      0.000
+    Q15F$1             1.558      0.035     44.772      0.000
+
+ Variances
+    CARPR_CO           1.000      0.000    999.000    999.000
+
+ Residual Variances
+    Q14A             999.000    999.000    999.000    999.000
+    Q14B             999.000    999.000    999.000    999.000
+    Q14F             999.000    999.000    999.000    999.000
+    Q14K             999.000    999.000    999.000    999.000
+    Q15A             999.000    999.000    999.000    999.000
+    Q15B             999.000    999.000    999.000    999.000
+    Q15F             999.000    999.000    999.000    999.000
+
+
+R-SQUARE
+
+Within Level
+
+    Observed                                        Two-Tailed     Scale
+    Variable        Estimate       S.E.  Est./S.E.    P-Value     Factors
+
+    Q14A               0.637      0.007     89.149      0.000      0.602
+    Q14B               0.522      0.011     46.054      0.000      0.692
+    Q14F               0.493      0.010     50.643      0.000      0.712
+    Q14K               0.251      0.010     25.525      0.000      0.866
+    Q15A               0.544      0.008     72.500      0.000      0.675
+    Q15B               0.312      0.007     46.615      0.000      0.830
+    Q15F               0.437      0.007     58.618      0.000      0.750
+
+Between Level
+
+    Observed                                        Two-Tailed
+    Variable        Estimate       S.E.  Est./S.E.    P-Value
+
+    Q14A               1.000    999.000    999.000    999.000
+    Q14B               1.000    999.000    999.000    999.000
+    Q14F               1.000    999.000    999.000    999.000
+    Q14K               1.000    999.000    999.000    999.000
+    Q15A               1.000    999.000    999.000    999.000
+    Q15B               1.000    999.000    999.000    999.000
+    Q15F               1.000    999.000    999.000    999.000
+
+
+QUALITY OF NUMERICAL RESULTS
+
+     Condition Number for the Information Matrix              0.616E-02
+       (ratio of smallest to largest eigenvalue)
+
+
+MODEL COMMAND WITH FINAL ESTIMATES USED AS STARTING VALUES
+
+     %WITHIN%
+
+     carpr_id BY q14a@1;
+     carpr_id BY q14b*0.78803 (f2);
+     carpr_id BY q14f*0.74439 (f3);
+     carpr_id BY q14k*0.43657 (f4);
+     carpr_id BY q15a*0.82413 (f5);
+     carpr_id BY q15b*0.50796 (f6);
+     carpr_id BY q15f*0.66504 (f7);
+
+     carpr_id*1.75552;
+
+     %BETWEEN%
+
+     carpr_co BY q14a@1;
+     carpr_co BY q14b*0.78803 (f2);
+     carpr_co BY q14f*0.74439 (f3);
+     carpr_co BY q14k*0.43657 (f4);
+     carpr_co BY q15a*0.82413 (f5);
+     carpr_co BY q15b*0.50796 (f6);
+     carpr_co BY q15f*0.66504 (f7);
+
+     [ q14a$1*2.09084 ];
+     [ q14b$1*1.86570 ];
+     [ q14f$1*2.31381 ];
+     [ q14k$1*2.13913 ];
+     [ q15a$1*1.62194 ];
+     [ q15b$1*0.86102 ];
+     [ q15f$1*1.55835 ];
+
+     q14a@0;
+     q14b@0;
+     q14f@0;
+     q14k@0;
+     q15a@0;
+     q15b@0;
+     q15f@0;
+     carpr_co*0.09891;
+
+
+
+DIAGRAM INFORMATION
+
+  Mplus diagrams are currently not available for multilevel analysis.
+  No diagram output was produced.
+
+
+     Beginning Time:  19:58:08
+        Ending Time:  20:04:25
+       Elapsed Time:  00:06:17
+
+
+
+MUTHEN & MUTHEN
+3463 Stoner Ave.
+Los Angeles, CA  90066
+
+Tel: (310) 391-9971
+Fax: (310) 391-8971
+Web: www.StatModel.com
+Support: Support@StatModel.com
+
+Copyright (c) 1998-2018 Muthen & Muthen

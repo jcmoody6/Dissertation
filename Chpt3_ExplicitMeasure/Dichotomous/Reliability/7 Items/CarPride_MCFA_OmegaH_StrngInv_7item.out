@@ -1,0 +1,459 @@
+Mplus VERSION 8.1
+MUTHEN & MUTHEN
+01/07/2019   8:21 PM
+
+INPUT INSTRUCTIONS
+
+  TITLE:	Car Prdie MCFA - Two Level Omega/H
+
+  DATA:	
+  	FILE IS CarPrideItems.txt;
+
+  VARIABLE:	
+  	NAMES ARE
+  	R_ID iso_num
+  	q14A	q14B	q14C	q14D	q14E	
+  	q14F	q14G	q14H	q14I	q14J	
+  	q14K	q14L	q15A	q15B	q15C	
+  	q15D	q15E	q15F;
+
+    USEVARIABLES ARE
+     	iso_num
+      	q14A q14B q14F q14K
+      	q15A q15B
+          !q15C q15D
+          q15F;
+
+    CATEGORICAL ARE
+          q14A q14B q14F q14K	
+      	q15A q15B
+          !q15C q15D
+          q15F;
+
+    CLUSTER = iso_num;
+    IDVARIABLE = R_ID;	
+    MISSING = ALL (-9999);
+
+  ANALYSIS:
+      TYPE = TWOLEVEL;
+      ESTIMATOR = WLSMV;
+      PARAMETERIZATION = THETA;
+
+
+  MODEL:
+      %WITHIN%
+      !Within-level factor loadings (Ls)
+      CarPr_Id BY q14A* (L1)
+          q14B (L2)
+          q14F (L3)
+          q14K (L4)
+          q15A (L5)
+          q15B (L6)
+          !q15C (L7)
+          !q15D (L8)
+          q15F (L9);
+      CarPr_Id@1;
+
+      !within-level residual variances for the 9 items
+      !not freely estimated; fixed at 1 for probit (pi^2/3 for logit)
+      !q14A q14B q14F q14K q15A q15B q15C q15D q15F (WR1-WR9);
+
+      %BETWEEN%
+      !Between-level loadings are set equal to the within-level loadings (Ls)
+      CarPr_Co BY q14A* (L1)
+          q14B (L2)
+          q14F (L3)
+          q14K (L4)
+          q15A (L5)
+          q15B (L6)
+          !q15C (L7)
+          !q15D (L8)
+          q15F (L9);
+      CarPr_CO@1;
+
+      !Between level item residual variances (BRs)
+      q14A@0 (BR1);
+      q14B@0 (BR2);
+      q14F@0 (BR3);
+      q14K@0 (BR4);
+      q15A@0 (BR5);
+      q15B@0 (BR6);
+      !q15C@0 (BR7);
+      !q15D@0 (BR8);
+      q15F@0 (BR9);
+
+
+  OUTPUT:
+      SAMPSTAT;
+
+  MODEL CONSTRAINT:
+      NEW(NUMW DENOMW OMEGAW HW
+          NUMB DENOMB OMEGAB);
+
+      NUMW = (L1+L2+L3+L4+L5+L6+L9)**2;
+      DENOMW = ((L1+L2+L3+L4+L5+L6+L9)**2)+7;
+               !+(WR1+WR2+WR3+WR4+WR5+WR6+WR9)
+      OMEGAW = NUMW/DENOMW;
+      !HW = 1/(1+(1/((WL1**2/WR1)+(WL2**2/WR2)+(WL3**2/WR3)+(WL4**2/WR4)
+      !     +(WL5**2/WR5)+(WL6**2/WR6)+(WL7**2/WR7)+(WL8**2/WR8)+(WL9**2/WR9))));
+      HW = 1/(1+(1/((L1**2)+(L2**2)+(L3**2)+(L4**2)+(L5**2)
+           +(L6**2)+(L9**2))));
+
+      NUMB = (L1+L2+L3+L4+L5+L6+L9)**2;
+      DENOMB = ((L1+L2+L3+L4+L5+L6+L9)**2)+0;
+               !+(BR1+BR2+BR3+BR4+BR5+BR6+BR9);
+      OMEGAB = NUMB/DENOMB;
+      !Divide by zero!
+      !HB = 1/(1+(1/((L1**2/BR1)+(L2**2/BR2)+(L3**2/BR3)+(L4**2/BR4)+(L5**2/BR5)
+      !     +(L6**2/BR6)+(L7**2/BR7)+(L8**2/BR8)+(L9**2/BR9))));
+
+      !Within residuals fixed at 1, so do not need to constrain to be > 0
+      !WR# > 0;
+
+      !Strong invariance assumption:
+      !Between residuals fixed at 0, so do not need to constrain to be > 0
+      !BR# > 0;
+
+
+
+INPUT READING TERMINATED NORMALLY
+
+
+
+Car Prdie MCFA - Two Level Omega/H
+
+SUMMARY OF ANALYSIS
+
+Number of groups                                                 1
+Number of observations                                       41932
+
+Number of dependent variables                                    7
+Number of independent variables                                  0
+Number of continuous latent variables                            2
+
+Observed dependent variables
+
+  Binary and ordered categorical (ordinal)
+   Q14A        Q14B        Q14F        Q14K        Q15A        Q15B
+   Q15F
+
+Continuous latent variables
+   CARPR_ID    CARPR_CO
+
+Variables with special functions
+
+  Cluster variable      ISO_NUM
+  ID variable           R_ID
+
+Estimator                                                    WLSMV
+Optimization Specifications for the Quasi-Newton Algorithm for
+Continuous Outcomes
+  Maximum number of iterations                                1000
+  Convergence criterion                                  0.100D-05
+Optimization Specifications for the EM Algorithm
+  Maximum number of iterations                                 500
+  Convergence criteria
+    Loglikelihood change                                 0.100D-02
+    Relative loglikelihood change                        0.100D-05
+    Derivative                                           0.100D-02
+Optimization Specifications for the M step of the EM Algorithm for
+Categorical Latent variables
+  Number of M step iterations                                    1
+  M step convergence criterion                           0.100D-02
+  Basis for M step termination                           ITERATION
+Optimization Specifications for the M step of the EM Algorithm for
+Censored, Binary or Ordered Categorical (Ordinal), Unordered
+Categorical (Nominal) and Count Outcomes
+  Number of M step iterations                                    1
+  M step convergence criterion                           0.100D-02
+  Basis for M step termination                           ITERATION
+  Maximum value for logit thresholds                            10
+  Minimum value for logit thresholds                           -10
+  Minimum expected cell size for chi-square              0.100D-01
+Maximum number of iterations for H1                           2000
+Convergence criterion for H1                             0.100D-03
+Optimization algorithm                                          FS
+Integration Specifications
+  Type                                                    STANDARD
+  Number of integration points                                   7
+  Dimensions of numerical integration                            2
+  Adaptive quadrature                                           ON
+Link                                                        PROBIT
+Cholesky                                                        ON
+
+Input data file(s)
+  CarPrideItems.txt
+Input data format  FREE
+
+
+SUMMARY OF DATA
+
+     Number of clusters                         51
+
+     Average cluster size      822.196
+
+     Estimated Intraclass Correlations for the Y Variables
+
+                Intraclass              Intraclass              Intraclass
+     Variable  Correlation   Variable  Correlation   Variable  Correlation
+
+     Q14A         0.046      Q14B         0.038      Q14F         0.050
+     Q14K         0.022      Q15A         0.031      Q15B         0.059
+     Q15F         0.032
+
+
+
+COVARIANCE COVERAGE OF DATA
+
+Minimum covariance coverage value   0.100
+
+
+UNIVARIATE PROPORTIONS AND COUNTS FOR CATEGORICAL VARIABLES
+
+    Q14A
+      Category 1    0.895        37543.000
+      Category 2    0.105         4389.000
+    Q14B
+      Category 1    0.898        37640.000
+      Category 2    0.102         4292.000
+    Q14F
+      Category 1    0.947        39709.000
+      Category 2    0.053         2223.000
+    Q14K
+      Category 1    0.966        40521.000
+      Category 2    0.034         1411.000
+    Q15A
+      Category 1    0.862        36154.000
+      Category 2    0.138         5778.000
+    Q15B
+      Category 1    0.754        31608.000
+      Category 2    0.246        10324.000
+    Q15F
+      Category 1    0.878        36825.000
+      Category 2    0.122         5107.000
+
+
+SAMPLE STATISTICS
+
+
+     ESTIMATED SAMPLE STATISTICS
+
+
+           MEANS/INTERCEPTS/THRESHOLDS
+              Q14A$1        Q14B$1        Q14F$1        Q14K$1        Q15A$1
+              ________      ________      ________      ________      ________
+                1.260         1.290         1.647         1.852         1.095
+
+
+           MEANS/INTERCEPTS/THRESHOLDS
+              Q15B$1        Q15F$1
+              ________      ________
+                0.714         1.169
+
+
+           WITHIN LEVEL VARIANCE/COVARIANCE
+              Q14A          Q14B          Q14F          Q14K          Q15A
+              ________      ________      ________      ________      ________
+ Q14A           1.000
+ Q14B           0.540         1.000
+ Q14F           0.515         0.506         1.000
+ Q14K           0.330         0.336         0.435         1.000
+ Q15A           0.626         0.546         0.501         0.389         1.000
+ Q15B           0.465         0.486         0.425         0.249         0.318
+ Q15F           0.537         0.459         0.517         0.418         0.462
+
+
+           WITHIN LEVEL VARIANCE/COVARIANCE
+              Q15B          Q15F
+              ________      ________
+ Q15B           1.000
+ Q15F           0.292         1.000
+
+
+           WITHIN LEVEL CORRELATION
+              Q14A          Q14B          Q14F          Q14K          Q15A
+              ________      ________      ________      ________      ________
+ Q14A           1.000
+ Q14B           0.540         1.000
+ Q14F           0.515         0.506         1.000
+ Q14K           0.330         0.336         0.435         1.000
+ Q15A           0.626         0.546         0.501         0.389         1.000
+ Q15B           0.465         0.486         0.425         0.249         0.318
+ Q15F           0.537         0.459         0.517         0.418         0.462
+
+
+           WITHIN LEVEL CORRELATION
+              Q15B          Q15F
+              ________      ________
+ Q15B           1.000
+ Q15F           0.292         1.000
+
+
+           BETWEEN LEVEL VARIANCE/COVARIANCE
+              Q14A          Q14B          Q14F          Q14K          Q15A
+              ________      ________      ________      ________      ________
+ Q14A           0.048
+ Q14B           0.031         0.040
+ Q14F           0.040         0.029         0.053
+ Q14K           0.015         0.010         0.023         0.022
+ Q15A           0.034         0.023         0.026         0.016         0.032
+ Q15B           0.020         0.021         0.030         0.006         0.008
+ Q15F           0.030         0.022         0.029         0.018         0.025
+
+
+           BETWEEN LEVEL VARIANCE/COVARIANCE
+              Q15B          Q15F
+              ________      ________
+ Q15B           0.063
+ Q15F           0.008         0.033
+
+
+           BETWEEN LEVEL CORRELATION
+              Q14A          Q14B          Q14F          Q14K          Q15A
+              ________      ________      ________      ________      ________
+ Q14A           1.000
+ Q14B           0.704         1.000
+ Q14F           0.788         0.640         1.000
+ Q14K           0.442         0.347         0.678         1.000
+ Q15A           0.857         0.647         0.644         0.606         1.000
+ Q15B           0.371         0.423         0.517         0.163         0.185
+ Q15F           0.739         0.611         0.693         0.673         0.776
+
+
+           BETWEEN LEVEL CORRELATION
+              Q15B          Q15F
+              ________      ________
+ Q15B           1.000
+ Q15F           0.179         1.000
+
+
+THE MODEL ESTIMATION TERMINATED NORMALLY
+
+
+
+MODEL FIT INFORMATION
+
+Number of Free Parameters                       14
+
+Chi-Square Test of Model Fit
+
+          Value                          17091.923*
+          Degrees of Freedom                    42
+          P-Value                           0.0000
+
+*   The chi-square value for MLM, MLMV, MLR, ULSMV, WLSM and WLSMV cannot be used
+    for chi-square difference testing in the regular way.  MLM, MLR and WLSM
+    chi-square difference testing is described on the Mplus website.  MLMV, WLSMV,
+    and ULSMV difference testing is done using the DIFFTEST option.
+
+RMSEA (Root Mean Square Error Of Approximation)
+
+          Estimate                           0.098
+
+CFI/TLI
+
+          CFI                                0.433
+          TLI                                0.433
+
+Chi-Square Test of Model Fit for the Baseline Model
+
+          Value                          30135.455
+          Degrees of Freedom                    42
+          P-Value                           0.0000
+
+SRMR (Standardized Root Mean Square Residual)
+
+          Value for Within                   0.252
+          Value for Between                  2.051
+
+
+
+MODEL RESULTS
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Within Level
+
+ CARPR_ID BY
+    Q14A               0.853      0.010     82.428      0.000
+    Q14B               0.493      0.009     53.735      0.000
+    Q14F               0.595      0.012     48.075      0.000
+    Q14K               0.167      0.007     22.864      0.000
+    Q15A               0.593      0.009     67.142      0.000
+    Q15B               0.537      0.010     54.312      0.000
+    Q15F               0.488      0.008     61.751      0.000
+
+ Variances
+    CARPR_ID           1.000      0.000    999.000    999.000
+
+Between Level
+
+ CARPR_CO BY
+    Q14A               0.853      0.010     82.428      0.000
+    Q14B               0.493      0.009     53.735      0.000
+    Q14F               0.595      0.012     48.075      0.000
+    Q14K               0.167      0.007     22.864      0.000
+    Q15A               0.593      0.009     67.142      0.000
+    Q15B               0.537      0.010     54.312      0.000
+    Q15F               0.488      0.008     61.751      0.000
+
+ Thresholds
+    Q14A$1             1.655      0.049     33.907      0.000
+    Q14B$1             1.439      0.035     41.538      0.000
+    Q14F$1             1.916      0.044     43.238      0.000
+    Q14K$1             1.878      0.030     62.328      0.000
+    Q15A$1             1.273      0.033     38.825      0.000
+    Q15B$1             0.811      0.042     19.341      0.000
+    Q15F$1             1.301      0.033     39.938      0.000
+
+ Variances
+    CARPR_CO           1.000      0.000    999.000    999.000
+
+ Residual Variances
+    Q14A               0.000      0.000    999.000    999.000
+    Q14B               0.000      0.000    999.000    999.000
+    Q14F               0.000      0.000    999.000    999.000
+    Q14K               0.000      0.000    999.000    999.000
+    Q15A               0.000      0.000    999.000    999.000
+    Q15B               0.000      0.000    999.000    999.000
+    Q15F               0.000      0.000    999.000    999.000
+
+New/Additional Parameters
+    NUMW              13.879      0.297     46.670      0.000
+    DENOMW            20.879      0.297     70.208      0.000
+    OMEGAW             0.665      0.005    139.205      0.000
+    HW                 0.690      0.004    158.290      0.000
+    NUMB              13.879      0.297     46.670      0.000
+    DENOMB            13.879      0.297     46.670      0.000
+    OMEGAB             1.000      0.000      0.000      1.000
+
+
+QUALITY OF NUMERICAL RESULTS
+
+     Condition Number for the Information Matrix              0.183E-04
+       (ratio of smallest to largest eigenvalue)
+
+
+DIAGRAM INFORMATION
+
+  Mplus diagrams are currently not available for multilevel analysis.
+  No diagram output was produced.
+
+
+     Beginning Time:  20:21:05
+        Ending Time:  20:38:37
+       Elapsed Time:  00:17:32
+
+
+
+MUTHEN & MUTHEN
+3463 Stoner Ave.
+Los Angeles, CA  90066
+
+Tel: (310) 391-9971
+Fax: (310) 391-8971
+Web: www.StatModel.com
+Support: Support@StatModel.com
+
+Copyright (c) 1998-2018 Muthen & Muthen
