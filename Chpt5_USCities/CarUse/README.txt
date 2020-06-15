@@ -1,4 +1,4 @@
-SEM model files (Mplus) relating car pride, household car ownership, and use of car for commuting travel. Included in the paper:
+SEM model files (Mplus) relating car pride, household car ownership, and use of car for commuting travel. Files with "_rev" appended to the end of the file name include additional correlations among covariates to improve model fit over the models included in the dissertation and were published in the following paper:
 
 Moody, J., and J. Zhao. (2020). Travel behavior as a driver of attitude: Car use and car pride in U.S. cities. [working paper]
 
